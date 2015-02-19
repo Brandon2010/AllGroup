@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_gravity="center"
-        android:textColor="#333"
+        android:textColor="#fff"
         android:textSize="18sp"
         android:text="Welcome, you are now logged in."  />
 
