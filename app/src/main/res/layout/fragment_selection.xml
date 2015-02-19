@@ -4,14 +4,14 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:background="#303040" >
+    android:background="#fff" >
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_gravity="center"
-        android:textColor="#fff"
+        android:textColor="#000"
         android:textSize="18sp"
         android:text="Welcome, you are now logged in."  />
 
