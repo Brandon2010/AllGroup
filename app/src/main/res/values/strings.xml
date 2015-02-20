@@ -7,5 +7,7 @@
     <string name="facebook_app_id">768970859853835</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="get_started">To get started, log in using Facebook</string>
+    <string name="title_activity_category">CategoryActivity</string>
+    <string name="title_activity_event">EventActivity</string>
 
 </resources>
