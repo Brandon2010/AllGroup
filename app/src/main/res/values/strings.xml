@@ -8,5 +8,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="get_started">To get started, log in using Facebook</string>
     <string name="settings"> Settings</string>
+    <string name="category">Category</string>
+    <string name="help">help</string>
+    <string name="title_activity_category">CategoryActivity</string>
 
 </resources>

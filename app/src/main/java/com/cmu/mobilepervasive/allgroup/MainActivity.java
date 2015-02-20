@@ -5,11 +5,13 @@ package com.cmu.mobilepervasive.allgroup;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBarActivity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.facebook.AppEventsLogger;
 import com.facebook.Session;
@@ -17,7 +19,7 @@ import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends ActionBarActivity {
 
 //    private static final String TAG = "debug";
     private static final int SPLASH = 0;
@@ -57,6 +59,14 @@ public class MainActivity extends FragmentActivity {
             transaction.hide(fragments[i]);
         }
         transaction.commit();
+
+        getActionBar().setDisplayHomeAsUpEnabled(false);
+        getActionBar().setHomeButtonEnabled(true);
+        getActionBar().setDisplayShowHomeEnabled(false);
+        getActionBar().setDisplayShowTitleEnabled(false);
+        getActionBar().setDisplayShowCustomEnabled(true);
+        View actionbarLayout = LayoutInflater.from(this).inflate(R.layout.actionbar_layout, null);
+        getActionBar().setCustomView(actionbarLayout);
     }
 
     @Override
@@ -114,7 +124,7 @@ public class MainActivity extends FragmentActivity {
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu) {
         // Only add the menu when the selection fragment is showing
         if (fragments[SELECTION].isVisible()) {
             if (menu.size() == 0) {
