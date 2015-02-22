@@ -44,7 +44,14 @@
             android:name=".EventActivity"
             android:label="@string/title_activity_event" >
         </activity>
-
+        <activity
+            android:name=".PostActivity"
+            android:label="@string/title_activity_post" >
+        </activity>
+        <activity
+            android:name=".ChatActivity"
+            android:label="@string/title_activity_chat" >
+        </activity>
     </application>
 
 </manifest>

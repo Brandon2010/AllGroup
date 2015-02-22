@@ -60,13 +60,13 @@ public class MainActivity extends ActionBarActivity {
         }
         transaction.commit();
 
-        getActionBar().setDisplayHomeAsUpEnabled(false);
+        /*getActionBar().setDisplayHomeAsUpEnabled(false);
         getActionBar().setHomeButtonEnabled(true);
         getActionBar().setDisplayShowHomeEnabled(false);
         getActionBar().setDisplayShowTitleEnabled(false);
         getActionBar().setDisplayShowCustomEnabled(true);
         View actionbarLayout = LayoutInflater.from(this).inflate(R.layout.actionbar_layout, null);
-        getActionBar().setCustomView(actionbarLayout);
+        getActionBar().setCustomView(actionbarLayout);*/
     }
 
     @Override

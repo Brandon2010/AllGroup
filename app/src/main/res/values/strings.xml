@@ -12,6 +12,10 @@
     <string name="help">help</string>
     <string name="title_activity_category">CategoryActivity</string>
     <string name="title_activity_event">EventActivity</string>
-
+    <string name="title_activity_post">PostActivity</string>
+    <string name="edit_post">Enter a post here</string>
+    <string name="button_post">Post</string>
+    <string name="button_chat">Chat</string>
+    <string name="title_activity_chat">ChatActivity</string>
 
 </resources>
