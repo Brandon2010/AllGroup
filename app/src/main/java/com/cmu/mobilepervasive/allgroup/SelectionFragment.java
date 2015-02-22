@@ -2,6 +2,7 @@ package com.cmu.mobilepervasive.allgroup;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -76,6 +77,8 @@ public class SelectionFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String out = "Click" + id;
                 Log.v(TAG, out);
+                Intent intent = new Intent(getActivity(), CategoryActivity.class);
+                startActivity(intent);
             }
         });
         SimpleAdapter sa = new SimpleAdapter(this.context, list, android.R.layout.simple_list_item_2,

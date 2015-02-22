@@ -12,6 +12,7 @@
     <string name="help">help</string>
     <string name="title_activity_category">CategoryActivity</string>
     <string name="title_activity_event">EventActivity</string>
+    <string name="action_edit">Edit</string>
 
 
 </resources>
