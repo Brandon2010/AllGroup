@@ -8,10 +8,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 
 import com.facebook.AppEventsLogger;
 import com.facebook.Session;
@@ -21,13 +23,14 @@ import com.facebook.UiLifecycleHelper;
 
 public class MainActivity extends ActionBarActivity {
 
-//    private static final String TAG = "debug";
+    private static final String TAG = "debug";
     private static final int SPLASH = 0;
     private static final int SELECTION = 1;
     private static final int SETTINGS = 2;
     private static final int FRAGMENT_COUNT = SETTINGS + 1;
 
     private MenuItem settings;
+    private ImageButton edit;
 
     private Fragment[] fragments = new Fragment[FRAGMENT_COUNT];
     private boolean isResumed = false;
@@ -60,13 +63,24 @@ public class MainActivity extends ActionBarActivity {
         }
         transaction.commit();
 
-        getActionBar().setDisplayHomeAsUpEnabled(false);
-        getActionBar().setHomeButtonEnabled(true);
-        getActionBar().setDisplayShowHomeEnabled(false);
-        getActionBar().setDisplayShowTitleEnabled(false);
-        getActionBar().setDisplayShowCustomEnabled(true);
-        View actionbarLayout = LayoutInflater.from(this).inflate(R.layout.actionbar_layout, null);
-        getActionBar().setCustomView(actionbarLayout);
+        if (fragments[SELECTION].isVisible()) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(false);
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+            getSupportActionBar().setDisplayShowCustomEnabled(true);
+            View actionbarLayout = LayoutInflater.from(this).inflate(R.layout.actionbar_layout, null);
+            getSupportActionBar().setCustomView(actionbarLayout);
+            edit = (ImageButton)findViewById(R.id.right_imbt);
+            edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.v(TAG, "click on plus");
+                }
+            });
+        } else {
+            getSupportActionBar().setTitle(R.string.app_name);
+        }
     }
 
     @Override
@@ -116,16 +130,25 @@ public class MainActivity extends ActionBarActivity {
             // if the session is already open,
             // try to show the selection fragment
             showFragment(SELECTION, false);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(false);
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+            getSupportActionBar().setDisplayShowCustomEnabled(true);
+            View actionbarLayout = LayoutInflater.from(this).inflate(R.layout.actionbar_layout, null);
+            getSupportActionBar().setCustomView(actionbarLayout);
         } else {
             // otherwise present the splash screen
             // and ask the person to login.
             showFragment(SPLASH, false);
+            getSupportActionBar().setCustomView(null);
+            getSupportActionBar().setTitle(R.string.app_name);
         }
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Only add the menu when the selection fragment is showing
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // only add the menu when the selection fragment is showing
         if (fragments[SELECTION].isVisible()) {
             if (menu.size() == 0) {
                 settings = menu.add(R.string.settings);
@@ -142,6 +165,8 @@ public class MainActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.equals(settings)) {
             showFragment(SETTINGS, true);
+            getSupportActionBar().setCustomView(null);
+            getSupportActionBar().setTitle(R.string.app_name);
             return true;
         }
         return false;
@@ -177,10 +202,26 @@ public class MainActivity extends ActionBarActivity {
                 // If the session state is open:
                 // Show the authenticated fragment
                 showFragment(SELECTION, false);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                getSupportActionBar().setHomeButtonEnabled(true);
+                getSupportActionBar().setDisplayShowHomeEnabled(false);
+                getSupportActionBar().setDisplayShowTitleEnabled(false);
+                getSupportActionBar().setDisplayShowCustomEnabled(true);
+                View actionbarLayout = LayoutInflater.from(this).inflate(R.layout.actionbar_layout, null);
+                getSupportActionBar().setCustomView(actionbarLayout);
+                edit = (ImageButton)findViewById(R.id.right_imbt);
+                edit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.v(TAG, "click on plus");
+                    }
+                });
             } else if (state.isClosed()) {
                 // If the session state is closed:
                 // Show the login fragment
                 showFragment(SPLASH, false);
+                getSupportActionBar().setDisplayShowCustomEnabled(false);
+                getSupportActionBar().setTitle(R.string.app_name);
             }
         }
     }
