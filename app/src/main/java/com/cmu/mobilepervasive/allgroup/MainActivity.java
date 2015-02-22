@@ -137,6 +137,13 @@ public class MainActivity extends ActionBarActivity {
             getSupportActionBar().setDisplayShowCustomEnabled(true);
             View actionbarLayout = LayoutInflater.from(this).inflate(R.layout.actionbar_layout, null);
             getSupportActionBar().setCustomView(actionbarLayout);
+            edit = (ImageButton)findViewById(R.id.right_imbt);
+            edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.v(TAG, "click on plus");
+                }
+            });
         } else {
             // otherwise present the splash screen
             // and ask the person to login.
