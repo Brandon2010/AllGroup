@@ -23,6 +23,7 @@
             android:layout_gravity="right" />
     </LinearLayout>
 
+
     <ListView
         android:layout_above="@id/chat_linear_1"
         android:layout_weight="2"
