@@ -12,11 +12,13 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/post_linear_1">
-        <EditText android:id="@+id/edit_post"
+        <EditText
+            android:id="@+id/edit_post"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/edit_post" />
         <Button
+            android:id="@+id/post_button"
             android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -26,10 +28,10 @@
 
 
     <ListView
-        android:layout_above="@id/post_linear_1"
         android:layout_weight="2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="top"
         android:id="@+id/post_list_1" />
 
 
