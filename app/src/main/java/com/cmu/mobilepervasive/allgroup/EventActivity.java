@@ -28,7 +28,7 @@ public class EventActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         listView1 = (ListView) findViewById(R.id.event_list1);
         list.add("INI 25th Anniversary");//modify this
-        list.add("May.14th, 09:00");
+        list.add("May 14th, 09:00");
         list.add("Cohon University Center");
         ArrayAdapter<String> myArrayAdapter = new ArrayAdapter<String>
                 (this, android.R.layout.simple_list_item_1, list);
