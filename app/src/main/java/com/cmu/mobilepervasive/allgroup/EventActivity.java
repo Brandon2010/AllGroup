@@ -1,37 +1,52 @@
 package com.cmu.mobilepervasive.allgroup;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 
 public class EventActivity extends ActionBarActivity {
-    private ListView listView;
+    private ListView listView1;
     private ArrayList<String> list = new ArrayList<String>();
+    private ArrayList<Map<String, Object>> picList = new ArrayList<Map<String, Object>>();
     private TextView description;
+
+    //private ArrayList<ImageView> imageView = new ArrayList<ImageView>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        listView = (ListView) findViewById(R.id.listView2);
+        listView1 = (ListView) findViewById(R.id.event_list1);
         list.add("INI 25th Anniversary");//modify this
-        list.add("Date/Time: ");
-        list.add("Location: ");
+        list.add("May.14th, 09:00");
+        list.add("Cohon University Center");
         ArrayAdapter<String> myArrayAdapter = new ArrayAdapter<String>
                 (this, android.R.layout.simple_list_item_1, list);
-        listView.setAdapter(myArrayAdapter);
+        listView1.setAdapter(myArrayAdapter);
 
+        /*// TODO: imageView is hardcoded
+        imageView.add((ImageView) findViewById(R.id.event_icon1));
+        imageView.add((ImageView) findViewById(R.id.event_icon2));
+        imageView.add((ImageView) findViewById(R.id.event_icon3));
 
-        description = (TextView)findViewById(R.id.textView);
+        imageView.get(0).setImageDrawable(R.drawable.add_food);
+        */
+
+        description = (TextView)findViewById(R.id.event_description);
+        description.setText("The Information Networking Institute (INI) is marking " +
+                "25 years of world-class graduate education in networking, " +
+                "security and mobility. The celebration will culminate on " +
+                "Saturday, April 18.");
 
     }
 
@@ -52,6 +67,9 @@ public class EventActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            return true;
+        } else if (id == android.R.id.home) {
+            finish();
             return true;
         }
 
