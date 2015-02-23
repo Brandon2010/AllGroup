@@ -15,12 +15,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 
+
 public class ChatActivity extends ActionBarActivity {
 
     private ListView listView;
     private EditText editText;
     private Button chatButton;
-    private ArrayList<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+    //private ArrayList<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+    //private ArrayList<Map<String, Object>> listTmp = new ArrayList<Map<String, Object>>();
+    //private ListView listViewTmp;
+
+
+    private MessagesListAdapter adapter;
+
+    private ArrayList<Message> listMessages;
 
 
     @Override
@@ -31,7 +39,7 @@ public class ChatActivity extends ActionBarActivity {
 
         listView = (ListView) findViewById(R.id.chat_list_1);
 
-        Map<String, Object> map = new HashMap<String, Object>();
+        /*Map<String, Object> map = new HashMap<String, Object>();
         map.put("title", "Zack");
         map.put("info", "Hello Everybody.");
         map.put("icon", R.drawable.add_food);
@@ -43,11 +51,26 @@ public class ChatActivity extends ActionBarActivity {
         map.put("icon", R.drawable.add_friends);
         list.add(map);
 
-        // TODO: Now just use post_item here
-        final SimpleAdapter adapter = new SimpleAdapter(this, list, R.layout.post_item,
+        final SimpleAdapter adapter = new SimpleAdapter(this, list, R.layout.chat_item_other,
                 new String[] {"title", "info", "icon"},
-                new int[] {R.id.post_title, R.id.post_info, R.id.post_icon});
+                new int[] {R.id.chat_title, R.id.chat_info, R.id.chat_icon});
+        listView.setAdapter(adapter);*/
+
+
+        /*final SimpleAdapter adapterTmp = new SimpleAdapter(this, list, R.layout.chat_item_other,
+                new String[] {"title", "info", "icon"},
+                new int[] {R.id.chat_title, R.id.chat_info, R.id.chat_icon});
+        listViewTmp.setAdapter(adapter);*/
+
+
+        listMessages = new ArrayList<Message>();
+
+        listMessages.add(new Message("Zack", "Hello Everybody.", R.drawable.add_friends, false));
+        listMessages.add(new Message("Bob", "Hi Zack. Anyone else here?", R.drawable.add_food, false));
+
+        adapter = new MessagesListAdapter(this, listMessages);
         listView.setAdapter(adapter);
+
 
         editText = (EditText) findViewById(R.id.edit_chat);
 
@@ -55,11 +78,14 @@ public class ChatActivity extends ActionBarActivity {
         chatButton.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Map<String, Object> map = new HashMap<String, Object>();
+
+                listMessages.add(new Message("Me", editText.getText().toString(), R.drawable.icon, true));
+
+                /*Map<String, Objdddect> map = new HashdMap<String, Object>();
                 map.put("title", "Me");
                 map.put("info", editText.getText().toString());
                 map.put("icon", R.drawable.icon);
-                list.add(map);
+                list.add(map);*/
 
                 adapter.notifyDataSetChanged();
 
