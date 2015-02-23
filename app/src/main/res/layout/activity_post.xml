@@ -26,13 +26,25 @@
             android:layout_gravity="right" />
     </LinearLayout>
 
-
-    <ListView
-        android:layout_weight="2"
-        android:layout_width="match_parent"
+    <ScrollView
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="top"
-        android:id="@+id/post_list_1" />
+        android:layout_above="@+id/post_linear_1"
+        android:layout_alignParentTop="true"
+        android:gravity="top"
+        android:scrollbars="vertical"
+        android:fillViewport="true">
+
+        <ListView
+            android:layout_weight="2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:id="@+id/post_list_1" />
+
+
+    </ScrollView>
+
 
 
 </RelativeLayout>

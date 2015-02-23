@@ -7,13 +7,6 @@
     android:orientation="vertical">
 
 
-    <ListView
-        android:id="@+id/chat_list_1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top"
-        android:layout_alignParentTop="true" />
-
     <LinearLayout
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"
@@ -33,6 +26,23 @@
             android:text="@string/button_chat"
             android:layout_gravity="right" />
     </LinearLayout>
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/chat_linear_1"
+        android:layout_alignParentTop="true"
+        android:gravity="top"
+        android:scrollbars="vertical"
+        android:fillViewport="true">
+
+        <ListView
+            android:id="@+id/chat_list_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:layout_alignParentTop="true" />
+    </ScrollView>
 
 
 </RelativeLayout>
