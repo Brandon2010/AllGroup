@@ -23,7 +23,6 @@ public class ChatActivity extends ActionBarActivity {
     private Button chatButton;
     //private ArrayList<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
     //private ArrayList<Map<String, Object>> listTmp = new ArrayList<Map<String, Object>>();
-    //private ListView listViewTmp;
 
 
     private MessagesListAdapter adapter;
