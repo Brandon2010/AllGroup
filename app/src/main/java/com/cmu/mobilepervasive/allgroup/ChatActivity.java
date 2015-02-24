@@ -65,8 +65,8 @@ public class ChatActivity extends ActionBarActivity {
 
         listMessages = new ArrayList<Message>();
 
-        listMessages.add(new Message("Zack", "Hello Everybody.", R.drawable.add_friends, false));
-        listMessages.add(new Message("Bob", "Hi Zack. Anyone else here?", R.drawable.add_food, false));
+        listMessages.add(new Message("Xi Wang", "Hello Everybody.", R.drawable.xi, false));
+        listMessages.add(new Message("Shan Gao", "Hi Xi. Anyone else here?", R.drawable.shan, false));
 
         adapter = new MessagesListAdapter(this, listMessages);
         listView.setAdapter(adapter);
@@ -79,7 +79,7 @@ public class ChatActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
 
-                listMessages.add(new Message("Me", editText.getText().toString(), R.drawable.icon, true));
+                listMessages.add(new Message("Zhengyang Zuo", editText.getText().toString(), R.drawable.zhengyang, true));
 
                 /*Map<String, Objdddect> map = new HashdMap<String, Object>();
                 map.put("title", "Me");

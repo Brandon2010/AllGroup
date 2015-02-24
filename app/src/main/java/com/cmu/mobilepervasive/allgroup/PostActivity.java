@@ -33,18 +33,18 @@ public class PostActivity extends ActionBarActivity {
         listView = (ListView) findViewById(R.id.post_list_1);
 
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("title", "Zack");
+        map.put("title", "Xi Wang");
         map.put("info", "The Information Networking Institute (INI) is marking " +
                 "25 years of world-class graduate education in networking, " +
                 "security and mobility. The celebration will culminate on " +
                 "Saturday, April 18.");
-        map.put("icon", R.drawable.add_food);
+        map.put("icon", R.drawable.xi);
         list.add(map);
 
         map = new HashMap<String, Object>();
-        map.put("title", "Nobody");
+        map.put("title", "Shan Gao");
         map.put("info", "The celebration is coming. This is the post area.");
-        map.put("icon", R.drawable.add_friends);
+        map.put("icon", R.drawable.shan);
         list.add(map);
 
         final SimpleAdapter adapter = new SimpleAdapter(this, list, R.layout.post_item,
@@ -59,9 +59,9 @@ public class PostActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Map<String, Object> map = new HashMap<String, Object>();
-                map.put("title", "Me");
+                map.put("title", "Zhengyang Zuo");
                 map.put("info", editText.getText().toString());
-                map.put("icon", R.drawable.icon);
+                map.put("icon", R.drawable.zhengyang);
                 list.add(map);
 
                 adapter.notifyDataSetChanged();
