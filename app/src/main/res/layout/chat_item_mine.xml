@@ -24,13 +24,23 @@
         <TextView android:id="@+id/chat_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18px"
+            android:padding="5dp"
+            android:textColor="@color/lblFromName"
+            android:textSize="12dp"
+            android:textStyle="italic"
             android:text="title" />
         <TextView android:id="@+id/chat_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="22px"
-            android:text="content" />
+            android:layout_marginLeft="80dp"
+            android:background="@drawable/bg_chat_mine"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
+            android:textColor="@color/white"
+            android:textSize="16dp"
+            android:text="content"/>
 
     </LinearLayout>
 
