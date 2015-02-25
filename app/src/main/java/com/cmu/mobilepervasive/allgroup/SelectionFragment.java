@@ -25,6 +25,8 @@ public class SelectionFragment extends Fragment {
     private Context context;
     private String[] categories = {"Party", "Meeting", "Anniversary", "Sports", "Unorganized"};
 
+    private ListView listView;
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -63,7 +65,7 @@ public class SelectionFragment extends Fragment {
         // Inflate the layout for this fragment
         //super.onCreateView(inflater, container, savedInstanceState);
         View category_view = inflater.inflate(R.layout.fragment_selection, container, false);
-        ListView listView = (ListView) category_view.findViewById((R.id.category_list));
+        listView = (ListView) category_view.findViewById((R.id.category_list));
         List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 
         for (int i = 0; i < categories.length; i++) {
@@ -78,6 +80,11 @@ public class SelectionFragment extends Fragment {
                 String out = "Click" + id;
                 Log.v(TAG, out);
                 Intent intent = new Intent(getActivity(), CategoryActivity.class);
+
+                HashMap<String, String> map = (HashMap<String, String>)listView.getItemAtPosition(position);
+
+                intent.putExtra("categoryName", map.get("title"));
+
                 startActivity(intent);
             }
         });

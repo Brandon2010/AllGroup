@@ -21,6 +21,11 @@ public class CategoryActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category);
+
+        Intent intent = getIntent();
+        String title = intent.getStringExtra("categoryName");
+
+        getSupportActionBar().setTitle(title);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         listView = (ListView) findViewById(R.id.listView);
@@ -32,11 +37,14 @@ public class CategoryActivity extends ActionBarActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-                                    long arg3) {
+            public void onItemClick(AdapterView<?> parent, View view, int pos,
+                                    long id) {
                 // TODO Auto-generated method stub
 
                 Intent intent = new Intent(CategoryActivity.this, EventActivity.class);
+
+                intent.putExtra("eventName", (String)listView.getItemAtPosition(pos));
+
                 startActivity(intent);
 
             }

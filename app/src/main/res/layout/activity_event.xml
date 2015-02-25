@@ -18,14 +18,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Chat"
-            android:id="@+id/event_button2" />
+            android:id="@+id/event_chat_button" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Post"
-            android:id="@+id/event_button" />
+            android:id="@+id/event_post_button" />
 
     </LinearLayout>
 

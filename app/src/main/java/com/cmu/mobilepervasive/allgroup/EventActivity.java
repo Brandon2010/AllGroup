@@ -1,10 +1,13 @@
 package com.cmu.mobilepervasive.allgroup;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -19,12 +22,20 @@ public class EventActivity extends ActionBarActivity {
     private ArrayList<Map<String, Object>> picList = new ArrayList<Map<String, Object>>();
     private TextView description;
 
+    private Button chatButton;
+    private Button postButton;
+
     //private ArrayList<ImageView> imageView = new ArrayList<ImageView>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
+
+        Intent intent = getIntent();
+        String title  = intent.getStringExtra("eventName");
+
+        getSupportActionBar().setTitle(title);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         listView1 = (ListView) findViewById(R.id.event_list1);
         list.add("INI 25th Anniversary");//modify this
@@ -47,6 +58,26 @@ public class EventActivity extends ActionBarActivity {
                 "25 years of world-class graduate education in networking, " +
                 "security and mobility. The celebration will culminate on " +
                 "Saturday, April 18.");
+
+        chatButton = (Button) findViewById(R.id.event_chat_button);
+        postButton = (Button) findViewById(R.id.event_post_button);
+
+        chatButton.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EventActivity.this, ChatActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        postButton.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EventActivity.this, PostActivity.class);
+
+                startActivity(intent);
+            }
+        });
 
     }
 
