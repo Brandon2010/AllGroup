@@ -40,12 +40,6 @@
             android:name=".MainActivity"
             android:label="@string/title_activity_event" >
 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
         </activity>
         <activity
             android:name=".PostActivity"
@@ -55,6 +49,12 @@
         <activity
             android:name=".ChatActivity"
             android:label="@string/title_activity_chat" >
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 
         </activity>
         <activity

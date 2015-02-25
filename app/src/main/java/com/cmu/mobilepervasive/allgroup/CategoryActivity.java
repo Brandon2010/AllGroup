@@ -30,6 +30,8 @@ public class CategoryActivity extends ActionBarActivity {
 
         listView = (ListView) findViewById(R.id.listView);
         eventList.add("INI 25th Anniversary");//modify this
+        eventList.add("Spring Festival Party");
+        eventList.add("Movie night");
         ArrayAdapter<String> myArrayAdapter = new ArrayAdapter<String>
                 (this, android.R.layout.simple_list_item_1, eventList);
         listView.setAdapter(myArrayAdapter);
