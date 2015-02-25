@@ -223,6 +223,7 @@ public class MainActivity extends ActionBarActivity {
                         showEditDialog();
                     }
                 });
+                getSupportActionBar().show();
             } else if (state.isClosed()) {
                 // If the session state is closed:
                 // Show the login fragment
@@ -230,6 +231,7 @@ public class MainActivity extends ActionBarActivity {
                 getSupportActionBar().setDisplayShowCustomEnabled(false);
                 //getSupportActionBar().setCustomView(null);
                 getSupportActionBar().setTitle(R.string.app_name);
+                getSupportActionBar().hide();
             }
         }
     }
