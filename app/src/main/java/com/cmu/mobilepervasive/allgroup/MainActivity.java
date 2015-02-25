@@ -67,25 +67,7 @@ public class MainActivity extends ActionBarActivity {
         }
         transaction.commit();
 
-        if (fragments[SELECTION].isVisible()) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-            getSupportActionBar().setHomeButtonEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(false);
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-            getSupportActionBar().setDisplayShowCustomEnabled(true);
-            View actionbarLayout = LayoutInflater.from(this).inflate(R.layout.actionbar_layout, null);
-            getSupportActionBar().setCustomView(actionbarLayout);
-            edit = (ImageButton) findViewById(R.id.right_imbt);
-            edit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.v(TAG, "click on plus");
-                    showEditDialog();
-                }
-            });
-        } else {
-            getSupportActionBar().setTitle(R.string.app_name);
-        }
+        constructActionBar();
     }
 
     @Override
@@ -93,9 +75,18 @@ public class MainActivity extends ActionBarActivity {
         super.onResume();
         uiHelper.onResume();
         isResumed = true;
+        constructActionBar();
 
         // Logs 'install' and 'app activate' App Events.
         AppEventsLogger.activateApp(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (fragments[SELECTION].isVisible()) {
+            constructActionBar();
+        }
     }
 
     @Override
@@ -154,7 +145,8 @@ public class MainActivity extends ActionBarActivity {
             // otherwise present the splash screen
             // and ask the person to login.
             showFragment(SPLASH, false);
-            getSupportActionBar().setCustomView(null);
+            getSupportActionBar().setDisplayShowCustomEnabled(false);
+            //getSupportActionBar().setCustomView(null);
             getSupportActionBar().setTitle(R.string.app_name);
         }
     }
@@ -178,8 +170,9 @@ public class MainActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.equals(settings)) {
             showFragment(SETTINGS, true);
-            getSupportActionBar().setCustomView(null);
-            getSupportActionBar().setTitle(R.string.app_name);
+//            getSupportActionBar().setCustomView(null);
+//            getSupportActionBar().setTitle(R.string.app_name);
+            getSupportActionBar().setDisplayShowCustomEnabled(false);
             return true;
         }
         return false;
@@ -235,6 +228,7 @@ public class MainActivity extends ActionBarActivity {
                 // Show the login fragment
                 showFragment(SPLASH, false);
                 getSupportActionBar().setDisplayShowCustomEnabled(false);
+                //getSupportActionBar().setCustomView(null);
                 getSupportActionBar().setTitle(R.string.app_name);
             }
         }
@@ -268,6 +262,28 @@ public class MainActivity extends ActionBarActivity {
                     }
                 });
         dialog.show();
+    }
+
+    private void constructActionBar() {
+        if (fragments[SELECTION].isVisible()) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(false);
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+            getSupportActionBar().setDisplayShowCustomEnabled(true);
+            View actionbarLayout = LayoutInflater.from(this).inflate(R.layout.actionbar_layout, null);
+            getSupportActionBar().setCustomView(actionbarLayout);
+            edit = (ImageButton) findViewById(R.id.right_imbt);
+            edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.v(TAG, "click on plus");
+                    showEditDialog();
+                }
+            });
+        } else {
+            getSupportActionBar().setTitle(R.string.app_name);
+        }
     }
 
 }
