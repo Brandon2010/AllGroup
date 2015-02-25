@@ -50,7 +50,9 @@
             android:divider="#00FFFFFF"
             android:dividerHeight="10dp"
             android:transcriptMode="alwaysScroll"
-            android:clickable="false"/>
+            android:clickable="false"
+            android:listSelector="@android:color/transparent"
+            />
     </ScrollView>
 
 

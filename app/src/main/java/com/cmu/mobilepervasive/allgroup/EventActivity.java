@@ -1,6 +1,7 @@
 package com.cmu.mobilepervasive.allgroup;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -52,6 +53,9 @@ public class EventActivity extends ActionBarActivity {
 
         imageView.get(0).setImageDrawable(R.drawable.add_food);
         */
+
+        ImageView imageView = (ImageView) findViewById(R.id.event_image);
+        imageView.setImageResource(R.drawable.cover);
 
         description = (TextView)findViewById(R.id.event_description);
         description.setText("The Information Networking Institute (INI) is marking " +

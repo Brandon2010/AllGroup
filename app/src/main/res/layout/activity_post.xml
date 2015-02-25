@@ -46,7 +46,9 @@
             android:dividerHeight="10dp"
             android:layout_gravity="top"
             android:transcriptMode="alwaysScroll"
-            android:clickable="false"/>
+            android:clickable="false"
+            android:listSelector="@android:color/transparent"
+            />
 
 
     </ScrollView>
