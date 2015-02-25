@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/bg_chat_other"
+    android:background="@drawable/bg_post_item"
     android:padding="5dp">
 
     <ImageView
@@ -19,12 +19,17 @@
         <TextView android:id="@+id/post_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="22px"
+            android:padding="5dp"
+            android:textSize="11dp"
             android:text="title"/>
         <TextView android:id="@+id/post_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20px"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
+            android:textSize="15dp"
             android:text="content"/>
 
     </LinearLayout>
