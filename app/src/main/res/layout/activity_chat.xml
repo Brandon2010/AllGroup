@@ -43,8 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="top"
             android:layout_alignParentTop="true"
-            android:padding="4dp"
-            android:divider="#FFCC00" />
+            android:padding="4dp" />
     </ScrollView>
 
 
