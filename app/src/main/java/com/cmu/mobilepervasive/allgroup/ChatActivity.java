@@ -80,12 +80,6 @@ public class ChatActivity extends ActionBarActivity {
 
                 listMessages.add(new Message("Zhengyang Zuo", editText.getText().toString(), R.drawable.zhengyang, true));
 
-                /*Map<String, Objdddect> map = new HashdMap<String, Object>();
-                map.put("title", "Me");
-                map.put("info", editText.getText().toString());
-                map.put("icon", R.drawable.icon);
-                list.add(map);*/
-
                 adapter.notifyDataSetChanged();
 
                 editText.setText("");
