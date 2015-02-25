@@ -19,5 +19,6 @@
     <string name="title_activity_chat">Chat</string>
     <string name="title_activity_new_event">New Event</string>
     <string name="add_friends">Add Friends</string>
+    <string name="edit_hint">Choose Action</string>
 
 </resources>

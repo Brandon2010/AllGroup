@@ -2,6 +2,8 @@ package com.cmu.mobilepervasive.allgroup;
 
 //import android.app.Fragment;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 
 import com.facebook.AppEventsLogger;
@@ -24,15 +27,16 @@ import com.facebook.UiLifecycleHelper;
 public class MainActivity extends ActionBarActivity {
 
     private static final String TAG = "debug";
+    private static final String DIALOG_ADD = "New Event";
+    private static final String DIALOG_EDIT = "Edit Dialogs";
+    private static final String CANCEL = "Cancel";
     private static final int SPLASH = 0;
     private static final int SELECTION = 1;
     private static final int SETTINGS = 2;
     private static final int FRAGMENT_COUNT = SETTINGS + 1;
-
+    private Fragment[] fragments = new Fragment[FRAGMENT_COUNT];
     private MenuItem settings;
     private ImageButton edit;
-
-    private Fragment[] fragments = new Fragment[FRAGMENT_COUNT];
     private boolean isResumed = false;
 
     private UiLifecycleHelper uiHelper;
@@ -71,11 +75,12 @@ public class MainActivity extends ActionBarActivity {
             getSupportActionBar().setDisplayShowCustomEnabled(true);
             View actionbarLayout = LayoutInflater.from(this).inflate(R.layout.actionbar_layout, null);
             getSupportActionBar().setCustomView(actionbarLayout);
-            edit = (ImageButton)findViewById(R.id.right_imbt);
+            edit = (ImageButton) findViewById(R.id.right_imbt);
             edit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Log.v(TAG, "click on plus");
+                    showEditDialog();
                 }
             });
         } else {
@@ -137,11 +142,12 @@ public class MainActivity extends ActionBarActivity {
             getSupportActionBar().setDisplayShowCustomEnabled(true);
             View actionbarLayout = LayoutInflater.from(this).inflate(R.layout.actionbar_layout, null);
             getSupportActionBar().setCustomView(actionbarLayout);
-            edit = (ImageButton)findViewById(R.id.right_imbt);
+            edit = (ImageButton) findViewById(R.id.right_imbt);
             edit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Log.v(TAG, "click on plus");
+                    showEditDialog();
                 }
             });
         } else {
@@ -216,11 +222,12 @@ public class MainActivity extends ActionBarActivity {
                 getSupportActionBar().setDisplayShowCustomEnabled(true);
                 View actionbarLayout = LayoutInflater.from(this).inflate(R.layout.actionbar_layout, null);
                 getSupportActionBar().setCustomView(actionbarLayout);
-                edit = (ImageButton)findViewById(R.id.right_imbt);
+                edit = (ImageButton) findViewById(R.id.right_imbt);
                 edit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Log.v(TAG, "click on plus");
+                        showEditDialog();
                     }
                 });
             } else if (state.isClosed()) {
@@ -231,6 +238,36 @@ public class MainActivity extends ActionBarActivity {
                 getSupportActionBar().setTitle(R.string.app_name);
             }
         }
+    }
+
+    private void showEditDialog() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+        dialog.setTitle(R.string.edit_hint);
+        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.select_dialog_item);
+        arrayAdapter.add(DIALOG_ADD);
+        arrayAdapter.add(DIALOG_EDIT);
+        dialog.setNegativeButton(CANCEL, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        dialog.setAdapter(arrayAdapter,
+                new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String selected = arrayAdapter.getItem(which);
+                        if (selected.equals(DIALOG_ADD)) {
+                            Intent intent = new Intent(MainActivity.this, NewEventActivity.class);
+                            startActivity(intent);
+                        } else if (selected.equals(DIALOG_EDIT)) {
+                            Log.v(TAG, "EDIT");
+                        }
+                    }
+                });
+        dialog.show();
     }
 
 }
