@@ -27,8 +27,9 @@ public class CategoryActivity extends ActionBarActivity {
 
         getSupportActionBar().setTitle(title);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        getSupportActionBar().setTitle("Events");
         listView = (ListView) findViewById(R.id.listView);
+
         eventList.add("INI 25th Anniversary");//modify this
         eventList.add("Spring Festival Party");
         eventList.add("Movie night");
