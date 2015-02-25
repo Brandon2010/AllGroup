@@ -36,13 +36,11 @@
         android:fillViewport="true">
 
         <ListView
-            android:layout_weight="2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
+            android:padding="5dp"
+            android:divider="#00FFFFFF"
+            android:dividerHeight="10dp"
             android:layout_gravity="top"
             android:id="@+id/post_list_1" />
 

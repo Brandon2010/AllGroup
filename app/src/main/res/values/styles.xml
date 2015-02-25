@@ -5,4 +5,13 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="myActionBarStyle" parent="android:Widget.ActionBar" >
+        <item name="android:background">@color/actionbar</item>
+        <item name="android:titleTextStyle">@style/AcBar_titleStyle</item>
+    </style>
+    <style name="AcBar_titleStyle">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
 </resources>

@@ -18,7 +18,7 @@
             android:layout_marginRight="0.5dip"
             android:text="Chat"
             android:id="@+id/event_chat_button"
-            android:background="@color/com_facebook_blue"
+            android:background="@color/bg_btn_trans"
             android:textColor="@color/button_material_light" />
 
         <Button
@@ -28,7 +28,7 @@
             android:layout_marginRight="0.5dip"
             android:text="Post"
             android:id="@+id/event_post_button"
-            android:background="@color/com_facebook_blue"
+            android:background="@color/bg_btn_trans"
             android:textColor="@color/background_floating_material_light" />
 
     </LinearLayout>
