@@ -21,12 +21,14 @@
             android:id="@+id/edit_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Event Name" />
+            android:hint="Event Name"
+            android:layout_marginBottom="10dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp">
 
             <Spinner
                 android:id="@+id/newevent_month"
@@ -55,13 +57,15 @@
             android:id="@+id/edit_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Location" />
+            android:hint="Location"
+            android:layout_marginBottom="10dp"/>
 
         <EditText
             android:id="@+id/edit_detail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Details" />
+            android:hint="Details"
+            android:layout_marginBottom="10dp"/>
 
         <Spinner
             android:id="@+id/newevent_category"

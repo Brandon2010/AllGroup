@@ -28,7 +28,7 @@ public class MainActivity extends ActionBarActivity {
 
     private static final String TAG = "debug";
     private static final String DIALOG_ADD = "New Event";
-    private static final String DIALOG_EDIT = "Edit Dialogs";
+    private static final String DIALOG_EDIT = "New Category";
     private static final String CANCEL = "Cancel";
     private static final int SPLASH = 0;
     private static final int SELECTION = 1;
