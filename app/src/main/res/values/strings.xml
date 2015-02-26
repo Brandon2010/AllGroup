@@ -20,5 +20,9 @@
     <string name="title_activity_new_event">New Event</string>
     <string name="add_friends">Add Friends</string>
     <string name="edit_hint">Choose Action</string>
+    <string name="edit_category">Create New Category</string>
+    <string name="input_category_name">New Category Name</string>
+    <string name="cancel">Cancel</string>
+    <string name='create'>Create</string>
 
 </resources>

@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.facebook.AppEventsLogger;
@@ -29,7 +30,6 @@ public class MainActivity extends ActionBarActivity {
     private static final String TAG = "debug";
     private static final String DIALOG_ADD = "New Event";
     private static final String DIALOG_EDIT = "New Category";
-    private static final String CANCEL = "Cancel";
     private static final int SPLASH = 0;
     private static final int SELECTION = 1;
     private static final int SETTINGS = 2;
@@ -242,7 +242,7 @@ public class MainActivity extends ActionBarActivity {
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.select_dialog_item);
         arrayAdapter.add(DIALOG_ADD);
         arrayAdapter.add(DIALOG_EDIT);
-        dialog.setNegativeButton(CANCEL, new DialogInterface.OnClickListener() {
+        dialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -260,6 +260,36 @@ public class MainActivity extends ActionBarActivity {
                             startActivity(intent);
                         } else if (selected.equals(DIALOG_EDIT)) {
                             Log.v(TAG, "EDIT");
+                            AlertDialog.Builder inner = new AlertDialog.Builder(MainActivity.this);
+                            inner.setTitle(R.string.edit_category);
+
+                            LayoutInflater inflater = MainActivity.this.getLayoutInflater();
+                            View dialogView = inflater.inflate(R.layout.create_category_layout, null);
+                            inner.setView(dialogView);
+
+                            final EditText editText = (EditText) dialogView.findViewById(R.id.category_name);
+
+                            inner.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+
+                            inner.setPositiveButton(R.string.create, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int id) {
+                                    // create new category
+                                    String newName = editText.getText().toString();
+                                    SelectionFragment sf = (SelectionFragment)fragments[SELECTION];
+                                    sf.updateListView(newName);
+                                    dialog.dismiss();
+                                }
+                            });
+
+                            AlertDialog alertDialog = inner.create();
+                            alertDialog.show();
+
                         }
                     }
                 });
