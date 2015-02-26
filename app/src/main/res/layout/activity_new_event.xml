@@ -72,22 +72,38 @@
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="category"/>
+            android:layout_marginBottom="10dp"/>
 
     </LinearLayout>
 
-
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:gravity="center_horizontal"
-        android:layout_below="@id/newevent_linear_1"
-        android:layout_marginTop="20dp">
-        <Button
-            android:id="@+id/newevent_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/add_friends" />
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="bottom"
+        android:id="@+id/newevent_linear_2">
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginRight="0.5dip"
+        android:text="Add Friends"
+        android:id="@+id/newevent_add_button"
+        android:background="@color/bg_btn_trans"
+        android:textColor="#FFFFFF" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginRight="0.5dip"
+        android:text="Done"
+        android:id="@+id/newevent_done_button"
+        android:background="@color/bg_btn_trans"
+        android:textColor="#FFFFFF" />
+
     </LinearLayout>
 
 

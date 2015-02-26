@@ -1,10 +1,13 @@
 package com.cmu.mobilepervasive.allgroup;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -15,6 +18,7 @@ public class NewEventActivity extends ActionBarActivity {
     private Spinner date;
     private Spinner time;
     private Spinner category;
+    private Button doneButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +57,15 @@ public class NewEventActivity extends ActionBarActivity {
         time.setAdapter(adapterTime);
         category.setAdapter(adapterCategory);
 
+        doneButton = (Button) findViewById(R.id.newevent_done_button);
+
+        doneButton.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(NewEventActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
 

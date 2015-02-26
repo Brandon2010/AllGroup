@@ -9,13 +9,15 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class CategoryActivity extends ActionBarActivity {
     private ListView listView;
-    private ArrayList<String> eventList = new ArrayList<String>();
+    private ArrayList<HashMap<String, String>> eventList = new ArrayList<HashMap<String, String>>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,12 +32,25 @@ public class CategoryActivity extends ActionBarActivity {
         getSupportActionBar().setTitle("Events");
         listView = (ListView) findViewById(R.id.listView);
 
-        eventList.add("INI 25th Anniversary");//modify this
-        eventList.add("Spring Festival Party");
-        eventList.add("Movie night");
-        ArrayAdapter<String> myArrayAdapter = new ArrayAdapter<String>
-                (this, android.R.layout.simple_list_item_1, eventList);
-        listView.setAdapter(myArrayAdapter);
+        HashMap<String, String> tmp = new HashMap<>();
+
+        tmp = new HashMap<String, String>();
+        tmp.put("event", "INI 25th Anniversary");
+        eventList.add(tmp);//modify this
+        tmp = new HashMap<String, String>();
+        tmp.put("event", "Spring Festival Party");
+        eventList.add(tmp);
+        tmp = new HashMap<String, String>();
+        tmp.put("event", "Movie night");
+        eventList.add(tmp);
+
+        //ArrayAdapter<String> myArrayAdapter = new ArrayAdapter<String>
+        //        (this, android.R.layout.simple_list_item_1, eventList);
+        //listView.setAdapter(myArrayAdapter);
+
+        SimpleAdapter sa = new SimpleAdapter(this, eventList, android.R.layout.simple_list_item_2,
+                new String[]{"event"}, new int[]{android.R.id.text2});
+        listView.setAdapter(sa);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -45,8 +60,9 @@ public class CategoryActivity extends ActionBarActivity {
                 // TODO Auto-generated method stub
 
                 Intent intent = new Intent(CategoryActivity.this, EventActivity.class);
+                HashMap<String, String> tmp = (HashMap<String, String>)listView.getItemAtPosition(pos);
 
-                intent.putExtra("eventName", (String)listView.getItemAtPosition(pos));
+                intent.putExtra("eventName", tmp.get("event"));
 
                 startActivity(intent);
 
