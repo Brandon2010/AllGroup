@@ -24,5 +24,6 @@
     <string name="input_category_name">New Category Name</string>
     <string name="cancel">Cancel</string>
     <string name='create'>Create</string>
+    <string name='title_activity_privacy_policy'>PrivacyPolicyActivity</string>
 
 </resources>
