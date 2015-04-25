@@ -27,14 +27,14 @@ public class PrivacyPolicyActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         webView = (WebView) findViewById(R.id.webView);
-        webView.setWebViewClient(new WebViewClient(){
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                view.getContext().startActivity(
-                        new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
-                return true;
-
-            }
-        });
+//        webView.setWebViewClient(new WebViewClient(){
+//            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+//                view.getContext().startActivity(
+//                        new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+//                return true;
+//
+//            }
+//        });
         webView.loadUrl("file:///android_asset/index.html");
     }
 
