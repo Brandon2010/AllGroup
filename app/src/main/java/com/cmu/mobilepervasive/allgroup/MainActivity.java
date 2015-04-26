@@ -225,6 +225,8 @@ public class MainActivity extends ActionBarActivity {
                     }
                 });
                 getSupportActionBar().show();
+
+
             } else if (state.isClosed()) {
                 // If the session state is closed:
                 // Show the login fragment

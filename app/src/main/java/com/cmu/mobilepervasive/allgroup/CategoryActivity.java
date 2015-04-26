@@ -1,8 +1,10 @@
 package com.cmu.mobilepervasive.allgroup;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,6 +13,18 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -58,9 +72,8 @@ public class CategoryActivity extends ActionBarActivity {
             public void onItemClick(AdapterView<?> parent, View view, int pos,
                                     long id) {
                 // TODO Auto-generated method stub
-
                 Intent intent = new Intent(CategoryActivity.this, EventActivity.class);
-                HashMap<String, String> tmp = (HashMap<String, String>)listView.getItemAtPosition(pos);
+                HashMap<String, String> tmp = (HashMap<String, String>) listView.getItemAtPosition(pos);
 
                 intent.putExtra("eventName", tmp.get("event"));
 
@@ -95,4 +108,5 @@ public class CategoryActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 }
