@@ -2,8 +2,10 @@ package com.cmu.mobilepervasive.allgroup;
 
 import android.content.Intent;
 import android.media.Image;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,8 +15,18 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class EventActivity extends ActionBarActivity {
@@ -25,8 +37,8 @@ public class EventActivity extends ActionBarActivity {
 
     private Button chatButton;
     private Button postButton;
-
     //private ArrayList<ImageView> imageView = new ArrayList<ImageView>();
+    private final static Logger LOGGER = Logger.getLogger(EventActivity.class.getName());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +46,7 @@ public class EventActivity extends ActionBarActivity {
         setContentView(R.layout.activity_event);
 
         Intent intent = getIntent();
-        String title  = intent.getStringExtra("eventName");
+        String title = intent.getStringExtra("eventName");
 
         getSupportActionBar().setTitle(title);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -57,7 +69,7 @@ public class EventActivity extends ActionBarActivity {
         ImageView imageView = (ImageView) findViewById(R.id.event_image);
         imageView.setImageResource(R.drawable.cover);
 
-        description = (TextView)findViewById(R.id.event_description);
+        description = (TextView) findViewById(R.id.event_description);
         description.setText("The Information Networking Institute (INI) is marking " +
                 "25 years of world-class graduate education in networking, " +
                 "security and mobility. The celebration will culminate on " +
@@ -66,15 +78,16 @@ public class EventActivity extends ActionBarActivity {
         chatButton = (Button) findViewById(R.id.event_chat_button);
         postButton = (Button) findViewById(R.id.event_post_button);
 
-        chatButton.setOnClickListener( new View.OnClickListener() {
+        chatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(EventActivity.this, ChatActivity.class);
+
                 startActivity(intent);
             }
         });
 
-        postButton.setOnClickListener( new View.OnClickListener() {
+        postButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(EventActivity.this, PostActivity.class);
@@ -99,7 +112,6 @@ public class EventActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
@@ -110,4 +122,5 @@ public class EventActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 }
