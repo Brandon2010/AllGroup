@@ -30,6 +30,7 @@ public class MainActivity extends ActionBarActivity {
     private static final String TAG = "debug";
     private static final String DIALOG_ADD = "New Event";
     private static final String DIALOG_EDIT = "New Category";
+    private static final String DIALOG_PRIVACYPOLICY = "Privacy Policy";
     private static final int SPLASH = 0;
     private static final int SELECTION = 1;
     private static final int SETTINGS = 2;
@@ -224,6 +225,8 @@ public class MainActivity extends ActionBarActivity {
                     }
                 });
                 getSupportActionBar().show();
+
+
             } else if (state.isClosed()) {
                 // If the session state is closed:
                 // Show the login fragment
@@ -242,6 +245,7 @@ public class MainActivity extends ActionBarActivity {
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.select_dialog_item);
         arrayAdapter.add(DIALOG_ADD);
         arrayAdapter.add(DIALOG_EDIT);
+        arrayAdapter.add(DIALOG_PRIVACYPOLICY);
         dialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
 
             @Override
@@ -289,7 +293,10 @@ public class MainActivity extends ActionBarActivity {
 
                             AlertDialog alertDialog = inner.create();
                             alertDialog.show();
-
+                        }
+                        else if(selected.equals(DIALOG_PRIVACYPOLICY)){
+                            Intent intent = new Intent(MainActivity.this, PrivacyPolicyActivity.class);
+                            startActivity(intent);
                         }
                     }
                 });

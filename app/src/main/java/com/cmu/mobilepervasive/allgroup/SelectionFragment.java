@@ -3,6 +3,7 @@ package com.cmu.mobilepervasive.allgroup;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -13,6 +14,14 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -84,6 +93,7 @@ public class SelectionFragment extends Fragment {
                 HashMap<String, String> map = (HashMap<String, String>)listView.getItemAtPosition(position);
 
                 intent.putExtra("categoryName", map.get("title"));
+                new connect().execute();
 
                 startActivity(intent);
             }
@@ -138,5 +148,45 @@ public class SelectionFragment extends Fragment {
     }
 
 
+
+    public class connect extends AsyncTask {
+        // 通过AsyncTask类提交数据 异步显示
+        @Override
+        protected Object doInBackground(Object... params_obj) {
+            String responseStr = "";
+            String uriAPI = "http://128.237.218.208:8080/AllGroupServerSide/servlet/EventServlet?eventOperation=getEventId&id=1";
+            HttpGet httpRequest = new HttpGet(uriAPI);
+            /*发送请求并等待响应*/
+            HttpResponse httpResponse = null;
+
+            try {
+                httpResponse = new DefaultHttpClient().execute(httpRequest);
+            } catch (ClientProtocolException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            if(httpResponse.getStatusLine().getStatusCode() == 200)
+            {
+                try {
+                    responseStr = EntityUtils.toString(httpResponse.getEntity(), HTTP.UTF_8);
+                    Log.v("DEBUG", responseStr);
+
+                } catch (IllegalStateException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+            else{
+                System.out.println("!!!!!!!!!!!!!!!!!!Error Response: "+httpResponse.getStatusLine().toString());
+            }
+            return responseStr;
+        }
+    }
 
 }
