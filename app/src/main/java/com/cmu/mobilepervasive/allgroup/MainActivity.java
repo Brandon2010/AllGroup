@@ -138,7 +138,7 @@ public class MainActivity extends ActionBarActivity {
             edit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.v(TAG, "click on plus");
+                    Log.v(TAG, "click on edit dialogue");
                     showEditDialog();
                 }
             });
