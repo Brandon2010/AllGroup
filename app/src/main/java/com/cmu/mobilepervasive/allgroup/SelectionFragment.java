@@ -115,12 +115,9 @@ public class SelectionFragment extends Fragment {
                 String out = "Click" + filterData.get((int)id).get("name");
                 Log.v(TAG, out);
                 Intent intent = new Intent(getActivity(), CategoryActivity.class);
-
                 //HashMap<String, String> map = (HashMap<String, String>)listView.getItemAtPosition(position);
-
                 intent.putExtra("categoryId", (Long)filterData.get((int)id).get("cateId"));
                 intent.putExtra("categoryName", (String)filterData.get((int)id).get("name"));
-
 
                 startActivity(intent);
             }
