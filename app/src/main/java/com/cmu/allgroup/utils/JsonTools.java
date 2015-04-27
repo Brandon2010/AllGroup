@@ -1,5 +1,7 @@
 package com.cmu.allgroup.utils;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,6 +28,9 @@ public class JsonTools {
 
         ArrayList<Map<String, Object>> events = new ArrayList<Map<String, Object>>();
         try {
+            jsonString = jsonString.substring(0, jsonString.length() - 7);
+            jsonString += "\"}]}";
+            Log.v("DEBUG", jsonString);
             JSONObject jsonObject = new JSONObject(jsonString);
             JSONArray jsonArray = jsonObject.getJSONArray(key);
             for (int i = 0; i < jsonArray.length(); i++) {
@@ -35,8 +40,11 @@ public class JsonTools {
                 map.put("name", eventJsonObject.getString("name"));
                 map.put("description", eventJsonObject.getString("description"));
                 map.put("location", eventJsonObject.getString("location"));
-                SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                map.put("time", sdfDate.format(eventJsonObject.getString("time")));
+               // SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Log.v("DEBUG", eventJsonObject.getString("time"));
+                map.put("time", eventJsonObject.getString("time"));
+
+                // map.put("time", sdfDate.format(eventJsonObject.getString("time")));
 //                map.put("picture_address",
 //                        eventJsonObject.getString("picture_address"));
                 events.add(map);
