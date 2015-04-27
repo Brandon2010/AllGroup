@@ -25,6 +25,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
+import static com.cmu.allgroup.utils.JsonTools.getEvents;
 
 //import android.net.Uri;
 
@@ -93,7 +97,6 @@ public class SelectionFragment extends Fragment {
                 HashMap<String, String> map = (HashMap<String, String>)listView.getItemAtPosition(position);
 
                 intent.putExtra("categoryName", map.get("title"));
-                new connect().execute();
 
                 startActivity(intent);
             }
@@ -154,7 +157,7 @@ public class SelectionFragment extends Fragment {
         @Override
         protected Object doInBackground(Object... params_obj) {
             String responseStr = "";
-            String uriAPI = "http://128.237.218.208:8080/AllGroupServerSide/servlet/EventServlet?eventOperation=getEventId&id=1";
+            String uriAPI = "http://128.237.218.208:8080/AllGroupServerSide/servlet/EventServlet?eventOperation=getEventCate&id=2";
             HttpGet httpRequest = new HttpGet(uriAPI);
             /*发送请求并等待响应*/
             HttpResponse httpResponse = null;

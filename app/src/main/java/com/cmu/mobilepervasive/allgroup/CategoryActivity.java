@@ -27,16 +27,21 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static com.cmu.allgroup.utils.JsonTools.getEvents;
 
 
 public class CategoryActivity extends ActionBarActivity {
     private ListView listView;
-    private ArrayList<HashMap<String, String>> eventList = new ArrayList<HashMap<String, String>>();
-
+   // private ArrayList<HashMap<String, String>> eventList = new ArrayList<HashMap<String, String>>();
+    private List<Map<String, Object>> events;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category);
+        new connect().execute();
 
         Intent intent = getIntent();
         String title = intent.getStringExtra("categoryName");
@@ -46,23 +51,23 @@ public class CategoryActivity extends ActionBarActivity {
         getSupportActionBar().setTitle("Events");
         listView = (ListView) findViewById(R.id.listView);
 
-        HashMap<String, String> tmp = new HashMap<>();
-
-        tmp = new HashMap<String, String>();
-        tmp.put("event", "INI 25th Anniversary");
-        eventList.add(tmp);//modify this
-        tmp = new HashMap<String, String>();
-        tmp.put("event", "Spring Festival Party");
-        eventList.add(tmp);
-        tmp = new HashMap<String, String>();
-        tmp.put("event", "Movie night");
-        eventList.add(tmp);
+//        HashMap<String, String> tmp = new HashMap<>();
+//
+//        tmp = new HashMap<String, String>();
+//        tmp.put("event", "INI 25th Anniversary");
+//        eventList.add(tmp);//modify this
+//        tmp = new HashMap<String, String>();
+//        tmp.put("event", "Spring Festival Party");
+//        eventList.add(tmp);
+//        tmp = new HashMap<String, String>();
+//        tmp.put("event", "Movie night");
+//        eventList.add(tmp);
 
         //ArrayAdapter<String> myArrayAdapter = new ArrayAdapter<String>
         //        (this, android.R.layout.simple_list_item_1, eventList);
         //listView.setAdapter(myArrayAdapter);
 
-        SimpleAdapter sa = new SimpleAdapter(this, eventList, android.R.layout.simple_list_item_2,
+        SimpleAdapter sa = new SimpleAdapter(this, events, android.R.layout.simple_list_item_2,
                 new String[]{"event"}, new int[]{android.R.id.text2});
         listView.setAdapter(sa);
 
@@ -74,7 +79,6 @@ public class CategoryActivity extends ActionBarActivity {
                 // TODO Auto-generated method stub
                 Intent intent = new Intent(CategoryActivity.this, EventActivity.class);
                 HashMap<String, String> tmp = (HashMap<String, String>) listView.getItemAtPosition(pos);
-
                 intent.putExtra("eventName", tmp.get("event"));
 
                 startActivity(intent);
@@ -107,6 +111,53 @@ public class CategoryActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public class connect extends AsyncTask {
+        // 通过AsyncTask类提交数据 异步显示
+
+
+        @Override
+        protected Object doInBackground(Object... params_obj) {
+            String responseStr = "";
+            String uriAPI = "http://128.237.218.208:8080/AllGroupServerSide/servlet/EventServlet?eventOperation=getEventCate&id=2";
+            HttpGet httpRequest = new HttpGet(uriAPI);
+            /*发送请求并等待响应*/
+            HttpResponse httpResponse = null;
+
+            try {
+                httpResponse = new DefaultHttpClient().execute(httpRequest);
+            } catch (ClientProtocolException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            if(httpResponse.getStatusLine().getStatusCode() == 200)
+            {
+                try {
+                    responseStr = EntityUtils.toString(httpResponse.getEntity(), HTTP.UTF_8);
+                    Log.v("DEBUG", responseStr);
+
+                    events =  getEvents("events", responseStr);
+                    for(int i = 0; i < events.size(); i++){
+                        Log.v("DEBUG",events.get(i).toString());
+                    }
+
+                } catch (IllegalStateException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+            else{
+                System.out.println("!!!!!!!!!!!!!!!!!!Error Response: "+httpResponse.getStatusLine().toString());
+            }
+            return responseStr;
+        }
     }
 
 }
