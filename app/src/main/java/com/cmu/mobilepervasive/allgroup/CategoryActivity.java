@@ -112,8 +112,10 @@ public class CategoryActivity extends ActionBarActivity {
                                     long id) {
                 // TODO Auto-generated method stub
                 Intent intent = new Intent(CategoryActivity.this, EventActivity.class);
-                HashMap<String, String> tmp = (HashMap<String, String>) listView.getItemAtPosition(pos);
-                intent.putExtra("eventName", tmp.get("event"));
+                intent.putExtra("eventName",  (String)events.get((int)id).get("name"));
+                intent.putExtra("description",  (String)events.get((int)id).get("description"));
+                intent.putExtra("location",  (String)events.get((int)id).get("location"));
+                intent.putExtra("time",  (String)events.get((int)id).get("time"));
 
                 startActivity(intent);
 
