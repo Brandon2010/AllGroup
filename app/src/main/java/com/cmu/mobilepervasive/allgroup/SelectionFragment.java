@@ -156,20 +156,6 @@ public class SelectionFragment extends Fragment {
     }
 
     public void updateListView(String category) {
-//        List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
-//        HashMap<String, String> item = new HashMap<String, String>();
-//        item.put("title", category);
-//        list.add(item);
-//        for (int i = 0; i < categories.length; i++) {
-//            HashMap<String, String> existed = new HashMap<String, String>();
-//            existed.put("title", categories[i]);
-//            list.add(existed);
-//        }
-//
-//        SimpleAdapter sa = new SimpleAdapter(this.context, list, android.R.layout.simple_list_item_2,
-//                new String[]{"title"}, new int[]{android.R.id.text2});
-//        listView.setAdapter(sa);
-//        sa.notifyDataSetChanged();
        new CreateCateAsyncTask().execute(category);
 
     }
