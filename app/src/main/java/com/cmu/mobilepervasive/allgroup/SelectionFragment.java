@@ -43,6 +43,7 @@ public class SelectionFragment extends Fragment {
     private SimpleAdapter sa;
     private View loadingView;
     private boolean isEnd = false;
+    private long userId = 1;
 
     Handler handler = new Handler() {
         public void handleMessage(Message paramMessage) {
@@ -155,20 +156,22 @@ public class SelectionFragment extends Fragment {
     }
 
     public void updateListView(String category) {
-        List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
-        HashMap<String, String> item = new HashMap<String, String>();
-        item.put("title", category);
-        list.add(item);
-        for (int i = 0; i < categories.length; i++) {
-            HashMap<String, String> existed = new HashMap<String, String>();
-            existed.put("title", categories[i]);
-            list.add(existed);
-        }
+//        List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+//        HashMap<String, String> item = new HashMap<String, String>();
+//        item.put("title", category);
+//        list.add(item);
+//        for (int i = 0; i < categories.length; i++) {
+//            HashMap<String, String> existed = new HashMap<String, String>();
+//            existed.put("title", categories[i]);
+//            list.add(existed);
+//        }
+//
+//        SimpleAdapter sa = new SimpleAdapter(this.context, list, android.R.layout.simple_list_item_2,
+//                new String[]{"title"}, new int[]{android.R.id.text2});
+//        listView.setAdapter(sa);
+//        sa.notifyDataSetChanged();
+       new CreateCateAsyncTask().execute(category);
 
-        SimpleAdapter sa = new SimpleAdapter(this.context, list, android.R.layout.simple_list_item_2,
-                new String[]{"title"}, new int[]{android.R.id.text2});
-        listView.setAdapter(sa);
-        sa.notifyDataSetChanged();
     }
 
     public void serverDataArrived(List list, boolean isEnd) {
@@ -279,6 +282,113 @@ public class SelectionFragment extends Fragment {
             }
             return jsonString;
         }
+    }
+
+    public class CreateCateAsyncTask extends
+            AsyncTask<String, Integer, List<Map<String, Object>>> {
+
+        /*
+         * (non-Javadoc)
+         *
+         * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
+         */
+        @Override
+        protected void onPostExecute(List<Map<String, Object>> result) {
+            super.onPostExecute(result);
+            if(result == null) {
+                Toast.makeText(SelectionFragment.this.getActivity(), "Network Problem", Toast.LENGTH_LONG).show();
+                return;
+            }
+            filterData = result;
+            List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
+            for (int i = 0; i < filterData.size(); i++) {
+                HashMap<String, String> item = new HashMap<String, String>();
+                item.put("title", filterData.get(i).get("name").toString());
+                list.add(item);
+            }
+            sa = new SimpleAdapter(SelectionFragment.this.context, list, android.R.layout.simple_list_item_2,
+                    new String[]{"title"}, new int[]{android.R.id.text2});
+            listView.setAdapter(sa);
+//            sa.notifyDataSetChanged();
+            serverDataArrived(result, true);
+        }
+
+        /*
+         * (non-Javadoc)
+         *
+         * @see android.os.AsyncTask#onPreExecute()
+         */
+        @Override
+        protected void onPreExecute() {
+            // TODO Auto-generated method stub
+            super.onPreExecute();
+        }
+
+        /*
+         * (non-Javadoc)
+         *
+         * @see android.os.AsyncTask#doInBackground(Params[])
+         */
+        @Override
+        protected List<Map<String, Object>> doInBackground(String... arg0) {
+            ArrayList<Map<String, Object>> categories = null;
+
+            System.out.println("In AsncTask!!");
+            try {
+                URL url = new URL(getResources().getText(R.string.host)
+                        + "CategoryServlet");
+                HttpURLConnection connection = (HttpURLConnection) url
+                        .openConnection();
+                connection.setConnectTimeout(3000);
+                connection.setRequestMethod("POST");
+                connection.setDoInput(true);
+                connection.setDoOutput(true);
+                StringBuffer params = new StringBuffer();
+                params.append("cateOperation=create&userId=")
+                        .append(userId).append("&name=")
+                        .append(arg0[0]);
+                byte[] bypes = params.toString().getBytes();
+                connection.getOutputStream().write(bypes);
+                int code = connection.getResponseCode();
+                if (code == 200) {
+                    String jsonString = ChangeInputStream(connection
+                            .getInputStream());
+                    categories = (ArrayList<Map<String, Object>>) JsonTools
+                            .getCategories("categories", jsonString);
+                }
+                System.out.println(categories.size() + "hits");
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            return categories;
+        }
+
+        /**
+         * Get json string
+         *
+         * @param inputStream
+         * @return
+         */
+        public String ChangeInputStream(InputStream inputStream) {
+            String jsonString = "";
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            int len = 0;
+            byte[] data = new byte[1024];
+
+            try {
+                while ((len = inputStream.read(data)) != -1) {
+                    outputStream.write(data, 0, len);
+                }
+                jsonString = new String(outputStream.toByteArray());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return jsonString;
+        }
+
     }
 
 }

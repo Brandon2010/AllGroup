@@ -10,14 +10,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ImageButton;
 
 import com.facebook.AppEventsLogger;
 import com.facebook.Session;
@@ -195,7 +192,7 @@ public class MainActivity extends ActionBarActivity {
             startActivity(intent);
         }
         else if(item.equals(newEvent)){
-            Log.v(TAG, "EDIT");
+//            Log.v(TAG, "EDIT");
             AlertDialog.Builder inner = new AlertDialog.Builder(MainActivity.this);
             inner.setTitle(R.string.edit_category);
 
