@@ -30,6 +30,7 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 
+<<<<<<< HEAD
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,13 +39,18 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
+=======
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+>>>>>>> daf2791ba47c0687d50ada5190b4644e9e6eb099
 
 
 public class MainActivity extends ActionBarActivity {
 
     private static final String TAG = "debug";
-    private static final String _ADD = "New Event";
-    private static final String _EDIT = "New Category";
+    private static final String _EVENT = "New Event";
+    private static final String _Category = "New Category";
     private static final String _PRIVACYPOLICY = "Privacy Policy";
     private static final int SPLASH = 0;
     private static final int SELECTION = 1;
@@ -184,8 +190,8 @@ public class MainActivity extends ActionBarActivity {
         // only add the menu when the selection fragment is showing
         if (fragments[SELECTION].isVisible()) {
             if (menu.size() == 0) {
-                newCategory = menu.add(_ADD);
-                newEvent = menu.add(_EDIT);
+                newCategory = menu.add(_EVENT);
+                newEvent = menu.add(_Category);
                 settings = menu.add(R.string.settings);
                 privacyPolicy = menu.add(_PRIVACYPOLICY);
 
@@ -215,7 +221,15 @@ public class MainActivity extends ActionBarActivity {
             startActivity(intent);
         }
         else if(item.equals(newCategory)){
+            SelectionFragment sf = (SelectionFragment)fragments[SELECTION];
+            List<Map<String, Object>> filterdata = sf.getFilterData();
+            ArrayList<String> list = new ArrayList<>();
+            for(int i = 0; i < filterdata.size(); i++){
+                list.add((String)filterdata.get(i).get("name"));
+            }
+
             Intent intent = new Intent(MainActivity.this, NewEventActivity.class);
+            intent.putStringArrayListExtra("filterData", list);
             startActivity(intent);
         }
         else if(item.equals(newEvent)){

@@ -37,7 +37,7 @@ public class SelectionFragment extends Fragment {
 
     private static final String TAG = "debug";
     private Context context;
-    private String[] categories = {"Party", "Meeting", "Anniversary", "Sports", "Unorganized"};
+    //private String[] categories = {"Party", "Meeting", "Anniversary", "Sports", "Unorganized"};
     private List<Map<String, Object>> filterData;
     private ListView listView;
     private SimpleAdapter sa;
@@ -308,6 +308,10 @@ public class SelectionFragment extends Fragment {
             }
             return jsonString;
         }
+    }
+
+    public List<Map<String, Object>> getFilterData(){
+        return filterData;
     }
 
     public class CreateCateAsyncTask extends
