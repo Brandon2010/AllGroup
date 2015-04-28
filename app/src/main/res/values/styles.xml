@@ -24,7 +24,7 @@
     </style>
 
     <style name="AcBar_titleStyle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">20sp</item>
         <item name="android:textColor">#FFFFFF</item>
 
     </style>
