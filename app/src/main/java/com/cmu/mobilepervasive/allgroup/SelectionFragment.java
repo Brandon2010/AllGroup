@@ -90,12 +90,52 @@ public class SelectionFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        Log.d(TAG, "Into onCreateView");
+        try {
+            MainActivity.semUserCate.acquire();
+            //semUserCate.acquire();
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+
         // Inflate the layout for this fragment
         //super.onCreateView(inflater, container, savedInstanceState);
         View category_view = inflater.inflate(R.layout.fragment_selection, container, false);
 
-        String url = getResources().getText(R.string.host) + "CategoryServlet?cateOperation=getId&userId=1";
-        new GetCateAsyncTask().execute(url);
+//        Session session = Session.getActiveSession();
+//
+//        if (session != null && session.isOpened()) {
+//
+//        }
+
+        //Log.d(TAG, "Before getting categories from server");
+
+        Thread t = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    Log.d(TAG, "Before in run acquire");
+                    MainActivity.semUserCate.acquire();
+                    Log.d(TAG, "After in run acquire");
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                //String userId = getArguments().getString("userId");
+                Long userId = MainActivity.userId;
+                Log.d(TAG, "userId: " + userId);
+
+                String url = getResources().getText(R.string.host) + "CategoryServlet?cateOperation=getId&userId=" + userId;
+                new GetCateAsyncTask().execute(url);
+            }
+        };
+        t.start();
+
+//        String url = getResources().getText(R.string.host) + "CategoryServlet?cateOperation=getId&userId=1";
+//        new GetCateAsyncTask().execute(url);
         listView = (ListView) category_view.findViewById((R.id.category_list));
 
         loadingView = LayoutInflater.from(this.getActivity()).inflate(R.layout.listfooter,
