@@ -47,13 +47,20 @@ public class EventActivity extends ActionBarActivity {
 
         Intent intent = getIntent();
         String title = intent.getStringExtra("eventName");
+        String eventDescription = intent.getStringExtra("description");
+        String location = intent.getStringExtra("location");
+        String time = intent.getStringExtra("time");
 
         getSupportActionBar().setTitle(title);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         listView1 = (ListView) findViewById(R.id.event_list1);
-        list.add("INI 25th Anniversary");//modify this
-        list.add("May 14th, 09:00");
-        list.add("Cohon University Center");
+        list.add(title);
+        list.add(time);
+        list.add(location);
+
+        //list.add("INI 25th Anniversary");//modify this
+        //list.add("May 14th, 09:00");
+        //list.add("Cohon University Center");
         ArrayAdapter<String> myArrayAdapter = new ArrayAdapter<String>
                 (this, android.R.layout.simple_list_item_1, list);
         listView1.setAdapter(myArrayAdapter);
@@ -70,10 +77,7 @@ public class EventActivity extends ActionBarActivity {
         imageView.setImageResource(R.drawable.cover);
 
         description = (TextView) findViewById(R.id.event_description);
-        description.setText("The Information Networking Institute (INI) is marking " +
-                "25 years of world-class graduate education in networking, " +
-                "security and mobility. The celebration will culminate on " +
-                "Saturday, April 18.");
+        description.setText(eventDescription);
 
         chatButton = (Button) findViewById(R.id.event_chat_button);
         postButton = (Button) findViewById(R.id.event_post_button);

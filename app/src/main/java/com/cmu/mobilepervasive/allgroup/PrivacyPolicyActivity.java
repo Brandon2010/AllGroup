@@ -6,9 +6,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -27,15 +29,20 @@ public class PrivacyPolicyActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         webView = (WebView) findViewById(R.id.webView);
-//        webView.setWebViewClient(new WebViewClient(){
-//            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+        WebSettings webSettings = webView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        webView.setWebViewClient(new WebViewClient(){
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                Log.v("DEBUG", url + "in web view");
 //                view.getContext().startActivity(
 //                        new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
-//                return true;
-//
-//            }
-//        });
+                view.loadUrl(url);
+                return true;
+
+            }
+        });
         webView.loadUrl("file:///android_asset/index.html");
+
     }
 
     @Override

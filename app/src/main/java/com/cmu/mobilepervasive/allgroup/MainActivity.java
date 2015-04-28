@@ -10,14 +10,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ImageButton;
 
 import com.facebook.AppEventsLogger;
 import com.facebook.Session;
@@ -28,16 +25,19 @@ import com.facebook.UiLifecycleHelper;
 public class MainActivity extends ActionBarActivity {
 
     private static final String TAG = "debug";
-    private static final String DIALOG_ADD = "New Event";
-    private static final String DIALOG_EDIT = "New Category";
-    private static final String DIALOG_PRIVACYPOLICY = "Privacy Policy";
+    private static final String _ADD = "New Event";
+    private static final String _EDIT = "New Category";
+    private static final String _PRIVACYPOLICY = "Privacy Policy";
     private static final int SPLASH = 0;
     private static final int SELECTION = 1;
     private static final int SETTINGS = 2;
     private static final int FRAGMENT_COUNT = SETTINGS + 1;
     private Fragment[] fragments = new Fragment[FRAGMENT_COUNT];
     private MenuItem settings;
-    private ImageButton edit;
+    private MenuItem privacyPolicy;
+    private MenuItem newCategory;
+    private MenuItem newEvent;
+  //  private ImageButton edit;
     private boolean isResumed = false;
 
     private UiLifecycleHelper uiHelper;
@@ -134,14 +134,14 @@ public class MainActivity extends ActionBarActivity {
             getSupportActionBar().setDisplayShowCustomEnabled(true);
             View actionbarLayout = LayoutInflater.from(this).inflate(R.layout.actionbar_layout, null);
             getSupportActionBar().setCustomView(actionbarLayout);
-            edit = (ImageButton) findViewById(R.id.right_imbt);
-            edit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.v(TAG, "click on edit dialogue");
-                    showEditDialog();
-                }
-            });
+//            edit = (ImageButton) findViewById(R.id.right_imbt);
+//            edit.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Log.v(TAG, "click on edit dialogue");
+//                    showEditDialog();
+//                }
+//            });
         } else {
             // otherwise present the splash screen
             // and ask the person to login.
@@ -157,12 +157,19 @@ public class MainActivity extends ActionBarActivity {
         // only add the menu when the selection fragment is showing
         if (fragments[SELECTION].isVisible()) {
             if (menu.size() == 0) {
+                newCategory = menu.add(_ADD);
+                newEvent = menu.add(_EDIT);
                 settings = menu.add(R.string.settings);
+                privacyPolicy = menu.add(_PRIVACYPOLICY);
+
             }
             return true;
         } else {
             menu.clear();
             settings = null;
+            privacyPolicy = null;
+            newEvent = null;
+            newCategory = null;
         }
         return false;
     }
@@ -175,6 +182,46 @@ public class MainActivity extends ActionBarActivity {
 //            getSupportActionBar().setTitle(R.string.app_name);
             getSupportActionBar().setDisplayShowCustomEnabled(false);
             return true;
+        }
+        else if(item.equals(privacyPolicy)){
+            Intent intent = new Intent(MainActivity.this, PrivacyPolicyActivity.class);
+            startActivity(intent);
+        }
+        else if(item.equals(newCategory)){
+            Intent intent = new Intent(MainActivity.this, NewEventActivity.class);
+            startActivity(intent);
+        }
+        else if(item.equals(newEvent)){
+//            Log.v(TAG, "EDIT");
+            AlertDialog.Builder inner = new AlertDialog.Builder(MainActivity.this);
+            inner.setTitle(R.string.edit_category);
+
+            LayoutInflater inflater = MainActivity.this.getLayoutInflater();
+            View dialogView = inflater.inflate(R.layout.create_category_layout, null);
+            inner.setView(dialogView);
+
+            final EditText editText = (EditText) dialogView.findViewById(R.id.category_name);
+
+            inner.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+
+            inner.setPositiveButton(R.string.create, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int id) {
+                    // create new category
+                    String newName = editText.getText().toString();
+                    SelectionFragment sf = (SelectionFragment)fragments[SELECTION];
+                    sf.updateListView(newName);
+                    dialog.dismiss();
+                }
+            });
+
+            AlertDialog alertDialog = inner.create();
+            alertDialog.show();
         }
         return false;
     }
@@ -216,14 +263,14 @@ public class MainActivity extends ActionBarActivity {
                 getSupportActionBar().setDisplayShowCustomEnabled(true);
                 View actionbarLayout = LayoutInflater.from(this).inflate(R.layout.actionbar_layout, null);
                 getSupportActionBar().setCustomView(actionbarLayout);
-                edit = (ImageButton) findViewById(R.id.right_imbt);
-                edit.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Log.v(TAG, "click on plus");
-                        showEditDialog();
-                    }
-                });
+//                edit = (ImageButton) findViewById(R.id.right_imbt);
+//                edit.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        Log.v(TAG, "click on plus");
+//                        showEditDialog();
+//                    }
+//                });
                 getSupportActionBar().show();
 
 
@@ -239,69 +286,68 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
-    private void showEditDialog() {
-        AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
-        dialog.setTitle(R.string.edit_hint);
-        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.select_dialog_item);
-        arrayAdapter.add(DIALOG_ADD);
-        arrayAdapter.add(DIALOG_EDIT);
-        arrayAdapter.add(DIALOG_PRIVACYPOLICY);
-        dialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        dialog.setAdapter(arrayAdapter,
-                new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String selected = arrayAdapter.getItem(which);
-                        if (selected.equals(DIALOG_ADD)) {
-                            Intent intent = new Intent(MainActivity.this, NewEventActivity.class);
-                            startActivity(intent);
-                        } else if (selected.equals(DIALOG_EDIT)) {
-                            Log.v(TAG, "EDIT");
-                            AlertDialog.Builder inner = new AlertDialog.Builder(MainActivity.this);
-                            inner.setTitle(R.string.edit_category);
-
-                            LayoutInflater inflater = MainActivity.this.getLayoutInflater();
-                            View dialogView = inflater.inflate(R.layout.create_category_layout, null);
-                            inner.setView(dialogView);
-
-                            final EditText editText = (EditText) dialogView.findViewById(R.id.category_name);
-
-                            inner.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            });
-
-                            inner.setPositiveButton(R.string.create, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int id) {
-                                    // create new category
-                                    String newName = editText.getText().toString();
-                                    SelectionFragment sf = (SelectionFragment)fragments[SELECTION];
-                                    sf.updateListView(newName);
-                                    dialog.dismiss();
-                                }
-                            });
-
-                            AlertDialog alertDialog = inner.create();
-                            alertDialog.show();
-                        }
-                        else if(selected.equals(DIALOG_PRIVACYPOLICY)){
-                            Intent intent = new Intent(MainActivity.this, PrivacyPolicyActivity.class);
-                            startActivity(intent);
-                        }
-                    }
-                });
-        dialog.show();
-    }
+//    private void showEditDialog() {
+//        AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+//        dialog.setTitle(R.string.edit_hint);
+//        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(MainActivity.this, R.layout.select_dialog);
+//        arrayAdapter.add(DIALOG_ADD);
+//        arrayAdapter.add(DIALOG_EDIT);
+//        arrayAdapter.add(DIALOG_PRIVACYPOLICY);
+//        dialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+//
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                dialog.dismiss();
+//            }
+//        });
+//        dialog.setAdapter(arrayAdapter,
+//                new DialogInterface.OnClickListener() {
+//
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        String selected = arrayAdapter.getItem(which);
+//                        if (selected.equals(DIALOG_ADD)) {
+//                            Intent intent = new Intent(MainActivity.this, NewEventActivity.class);
+//                            startActivity(intent);
+//                        } else if (selected.equals(DIALOG_EDIT)) {
+//                            Log.v(TAG, "EDIT");
+//                            AlertDialog.Builder inner = new AlertDialog.Builder(MainActivity.this);
+//                            inner.setTitle(R.string.edit_category);
+//
+//                            LayoutInflater inflater = MainActivity.this.getLayoutInflater();
+//                            View dialogView = inflater.inflate(R.layout.create_category_layout, null);
+//                            inner.setView(dialogView);
+//
+//                            final EditText editText = (EditText) dialogView.findViewById(R.id.category_name);
+//
+//                            inner.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                    dialog.dismiss();
+//                                }
+//                            });
+//
+//                            inner.setPositiveButton(R.string.create, new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog, int id) {
+//                                    // create new category
+//                                    String newName = editText.getText().toString();
+//                                    SelectionFragment sf = (SelectionFragment)fragments[SELECTION];
+//                                    sf.updateListView(newName);
+//                                    dialog.dismiss();
+//                                }
+//                            });
+//
+//                            AlertDialog alertDialog = inner.create();
+//                            alertDialog.show();
+//                        }
+//                        else if(selected.equals(DIALOG_PRIVACYPOLICY)){
+//
+//                        }
+//                    }
+//                });
+//        dialog.show();
+//    }
 
     private void constructActionBar() {
         if (fragments[SELECTION].isVisible()) {
@@ -312,14 +358,14 @@ public class MainActivity extends ActionBarActivity {
             getSupportActionBar().setDisplayShowCustomEnabled(true);
             View actionbarLayout = LayoutInflater.from(this).inflate(R.layout.actionbar_layout, null);
             getSupportActionBar().setCustomView(actionbarLayout);
-            edit = (ImageButton) findViewById(R.id.right_imbt);
-            edit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.v(TAG, "click on plus");
-                    showEditDialog();
-                }
-            });
+//            edit = (ImageButton) findViewById(R.id.right_imbt);
+//            edit.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Log.v(TAG, "click on plus");
+//                    showEditDialog();
+//                }
+//            });
         } else {
             getSupportActionBar().setTitle(R.string.app_name);
         }
