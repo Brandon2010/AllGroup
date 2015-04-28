@@ -247,7 +247,7 @@ public class SelectionFragment extends Fragment {
                     categories = (ArrayList<Map<String, Object>>) JsonTools
                             .getCategories("categories", jsonString);
                 }
-                System.out.println(categories.size() + "hits");
+//                System.out.println(categories.size() + "hits");
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
