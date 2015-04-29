@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.cmu.allgroup.utils.JsonTools;
@@ -175,7 +176,18 @@ public class SelectionFragment extends Fragment {
             }
         });
         sa = new SimpleAdapter(this.context, list, android.R.layout.simple_list_item_2,
-                new String[]{"title"}, new int[]{android.R.id.text2});
+                new String[]{"title"}, new int[]{android.R.id.text2}){
+
+                public View getView(int position, View convertView, ViewGroup parent) {
+                    View view = super.getView(position, convertView, parent);
+                    TextView text1 = (TextView) view.findViewById(android.R.id.text2);
+                    text1.setTextSize(18);
+
+                    return view;
+
+                };
+
+        };
         listView.setAdapter(sa);
         return category_view;
     }
@@ -247,8 +259,22 @@ public class SelectionFragment extends Fragment {
                 item.put("title", filterData.get(i).get("name").toString());
                 list.add(item);
             }
+          //  sa = new SimpleAdapter(SelectionFragment.this.context, list, android.R.layout.simple_list_item_2,
+            //        new String[]{"title"}, new int[]{android.R.id.text2});
             sa = new SimpleAdapter(SelectionFragment.this.context, list, android.R.layout.simple_list_item_2,
-                    new String[]{"title"}, new int[]{android.R.id.text2});
+                    new String[]{"title"}, new int[]{android.R.id.text2}){
+
+                public View getView(int position, View convertView, ViewGroup parent) {
+                    View view = super.getView(position, convertView, parent);
+                    TextView text1 = (TextView) view.findViewById(android.R.id.text2);
+                    text1.setTextSize(18);
+                    text1.setPadding(10, 0, 0, 2);
+
+                    return view;
+
+                };
+
+            };
             listView.setAdapter(sa);
 //            sa.notifyDataSetChanged();
             serverDataArrived(result, true);
@@ -354,8 +380,22 @@ public class SelectionFragment extends Fragment {
                 item.put("title", filterData.get(i).get("name").toString());
                 list.add(item);
             }
+ //           sa = new SimpleAdapter(SelectionFragment.this.context, list, android.R.layout.simple_list_item_2,
+   //                 new String[]{"title"}, new int[]{android.R.id.text2});
             sa = new SimpleAdapter(SelectionFragment.this.context, list, android.R.layout.simple_list_item_2,
-                    new String[]{"title"}, new int[]{android.R.id.text2});
+                    new String[]{"title"}, new int[]{android.R.id.text2}){
+
+                public View getView(int position, View convertView, ViewGroup parent) {
+                    View view = super.getView(position, convertView, parent);
+                    TextView text1 = (TextView) view.findViewById(android.R.id.text2);
+                    text1.setTextSize(18);
+                    text1.setPadding(10, 0, 0, 2);
+
+                    return view;
+
+                };
+
+            };
             listView.setAdapter(sa);
 //            sa.notifyDataSetChanged();
 

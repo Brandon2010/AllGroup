@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -61,6 +62,7 @@ public class EventActivity extends ActionBarActivity {
         String eventDescription = intent.getStringExtra("description");
         String location = intent.getStringExtra("location");
         String time = intent.getStringExtra("time");
+        time = time.substring(0, time.length()-2);
         final Long eventId = intent.getLongExtra("eventId", 0);
 
         getSupportActionBar().setTitle(title);
@@ -73,8 +75,19 @@ public class EventActivity extends ActionBarActivity {
         //list.add("INI 25th Anniversary");//modify this
         //list.add("May 14th, 09:00");
         //list.add("Cohon University Center");
-        ArrayAdapter<String> myArrayAdapter = new ArrayAdapter<String>
-                (this, android.R.layout.simple_list_item_1, list);
+       // ArrayAdapter<String> myArrayAdapter = new ArrayAdapter<String>
+       //         (this, android.R.layout.simple_list_item_1, list);
+        ArrayAdapter<String> myArrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, list)
+        {
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                TextView text1 = (TextView) view.findViewById(android.R.id.text1);
+                text1.setPadding(15, 0, 0, 0);
+
+                return view;
+            };
+
+        };
         listView1.setAdapter(myArrayAdapter);
 
         /*// TODO: imageView is hardcoded
