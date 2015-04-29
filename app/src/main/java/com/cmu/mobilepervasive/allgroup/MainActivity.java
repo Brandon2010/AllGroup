@@ -194,11 +194,10 @@ public class MainActivity extends ActionBarActivity {
         // only add the menu when the selection fragment is showing
         if (fragments[SELECTION].isVisible()) {
             if (menu.size() == 0) {
-                newEvent = menu.add(_EVENT);
                 newCategory = menu.add(_Category);
-                settings = menu.add(R.string.settings);
+                newEvent = menu.add(_EVENT);
                 privacyPolicy = menu.add(_PRIVACYPOLICY);
-
+                settings = menu.add(R.string.settings);
             }
             return true;
         } else {
