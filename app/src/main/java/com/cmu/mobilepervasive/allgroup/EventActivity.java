@@ -13,7 +13,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.cmu.allgroup.utils.JsonTools;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -22,8 +26,15 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -50,6 +61,7 @@ public class EventActivity extends ActionBarActivity {
         String eventDescription = intent.getStringExtra("description");
         String location = intent.getStringExtra("location");
         String time = intent.getStringExtra("time");
+        final Long eventId = intent.getLongExtra("eventId", 0);
 
         getSupportActionBar().setTitle(title);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -95,7 +107,7 @@ public class EventActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(EventActivity.this, PostActivity.class);
-
+                intent.putExtra("eventId", eventId);
                 startActivity(intent);
             }
         });

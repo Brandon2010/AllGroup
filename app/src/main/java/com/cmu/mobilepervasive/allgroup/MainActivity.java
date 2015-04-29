@@ -205,7 +205,6 @@ public class MainActivity extends ActionBarActivity {
             privacyPolicy = null;
             newEvent = null;
             newCategory = null;
-            importEvent = null;
         }
         return false;
     }
