@@ -95,6 +95,18 @@ public class NewEventActivity extends ActionBarActivity {
         time.setAdapter(adapterTime);
         category.setAdapter(adapterCategory);
 
+        upload = (Button) findViewById(R.id.upload);
+        upload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");
+                startActivityForResult(intent, PHOTO_REQUEST_GALLERY);
+            }
+        });
+
+        uploadImage = (ImageView) findViewById(R.id.imageViewUpload);
+
         doneButton = (Button) findViewById(R.id.newevent_done_button);
 
         doneButton.setOnClickListener( new View.OnClickListener() {
@@ -116,18 +128,6 @@ public class NewEventActivity extends ActionBarActivity {
                 startActivity(intent);
             }
         });
-
-        upload = (Button) findViewById(R.id.upload);
-        upload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType("image/*");
-                startActivityForResult(intent, PHOTO_REQUEST_GALLERY);
-            }
-        });
-
-        uploadImage = (ImageView) findViewById(R.id.imageViewUpload);
 
     }
 
