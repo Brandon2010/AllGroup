@@ -1,7 +1,9 @@
 package com.cmu.mobilepervasive.allgroup;
 
 import android.content.Intent;
-import android.os.*;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -11,7 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -19,19 +20,9 @@ import android.widget.Toast;
 
 import com.cmu.allgroup.utils.JsonTools;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
-
-import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -40,8 +31,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import static com.cmu.allgroup.utils.JsonTools.getEvents;
 
 
 public class CategoryActivity extends ActionBarActivity {
@@ -119,6 +108,7 @@ public class CategoryActivity extends ActionBarActivity {
                 intent.putExtra("location",  (String)events.get((int)id).get("location"));
                 intent.putExtra("time",  (String)events.get((int)id).get("time"));
                 intent.putExtra("eventId", (long)events.get((int)id).get("eventId"));
+                intent.putExtra("image_url", (String)events.get((int)id).get("image_url"));
                 startActivity(intent);
 
             }
