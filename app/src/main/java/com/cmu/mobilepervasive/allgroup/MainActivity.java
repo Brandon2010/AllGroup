@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.cmu.allgroup.utils.JsonTools;
@@ -54,7 +55,7 @@ public class MainActivity extends ActionBarActivity {
     private static final String _EVENT = "New Event";
     private static final String _Category = "New Category";
     private static final String _PRIVACYPOLICY = "Privacy Policy";
-    private static final String _IMPORT = "Import";
+    private static final String _IMPORT = "Import FB Events";
 
     private static final int SPLASH = 0;
     private static final int SELECTION = 1;
@@ -377,7 +378,7 @@ public class MainActivity extends ActionBarActivity {
                             //sf.updateListView(fbCateName);
 
                             try {
-                                sleep(1000);
+                                sleep(100);
 
                                 Log.d(TAG, "Before acquire semImport 2: " + semImport.availablePermits());
                                 semImport.acquire();
