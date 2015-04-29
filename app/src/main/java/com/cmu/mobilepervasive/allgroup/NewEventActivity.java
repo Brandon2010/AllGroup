@@ -150,14 +150,6 @@ public class NewEventActivity extends ActionBarActivity {
             super.onPreExecute();
         }
 
-        @Override
-        protected void onPostExecute(List<Map<String, Object>> result) {
-            if (MainActivity.state == MainActivity.IMPORT) {
-                Log.d("DEBUG", "in CreateEventAsync before release semImport");
-                MainActivity.semImport.release();
-            }
-        }
-
         /*
          * (non-Javadoc)
          *
