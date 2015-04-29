@@ -65,6 +65,12 @@ public class MainActivity extends ActionBarActivity {
     // TODO Use semaphore temporarily
     public static Semaphore semInner = new Semaphore(1, false);
     public static Semaphore semUserCate = new Semaphore(1, false);
+    public static Semaphore semImport = new Semaphore(1, false);
+
+
+    public static final int NORMAL = 0, IMPORT = 1;
+    public static int state = NORMAL;
+
 
     public static long userId = -1;
 
@@ -218,7 +224,7 @@ public class MainActivity extends ActionBarActivity {
             Intent intent = new Intent(MainActivity.this, PrivacyPolicyActivity.class);
             startActivity(intent);
         }
-        else if(item.equals(newCategory)){
+        else if(item.equals(newEvent)){
             SelectionFragment sf = (SelectionFragment)fragments[SELECTION];
             List<Map<String, Object>> filterdata = sf.getFilterData();
             ArrayList<String> list = new ArrayList<>();
@@ -237,7 +243,7 @@ public class MainActivity extends ActionBarActivity {
             intent.putExtra("bundle", bundle);
             startActivity(intent);
         }
-        else if(item.equals(newEvent)){
+        else if(item.equals(newCategory)){
 //            Log.v(TAG, "EDIT");
             AlertDialog.Builder inner = new AlertDialog.Builder(MainActivity.this);
             inner.setTitle(R.string.edit_category);
