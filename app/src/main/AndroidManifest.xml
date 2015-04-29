@@ -68,6 +68,12 @@
             android:screenOrientation="portrait">
 
         </activity>
+        <activity
+            android:name=".AddFriendActivity"
+            android:label="@string/title_activity_add_friend"
+            android:screenOrientation="portrait">
+
+        </activity>
     </application>
 
 </manifest>

@@ -6,7 +6,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,6 +35,7 @@ public class JsonTools {
                // SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Log.v("DEBUG", eventJsonObject.getString("time"));
                 map.put("time", eventJsonObject.getString("time"));
+                map.put("image_url", eventJsonObject.getString("image_url"));
 
                 // map.put("time", sdfDate.format(eventJsonObject.getString("time")));
 //                map.put("picture_address",

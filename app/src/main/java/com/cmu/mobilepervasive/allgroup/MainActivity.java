@@ -20,7 +20,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.cmu.allgroup.utils.JsonTools;
@@ -203,12 +202,12 @@ public class MainActivity extends ActionBarActivity {
         // only add the menu when the selection fragment is showing
         if (fragments[SELECTION].isVisible()) {
             if (menu.size() == 0) {
-                newEvent = menu.add(_EVENT);
                 newCategory = menu.add(_Category);
-                settings = menu.add(R.string.settings);
+                newEvent = menu.add(_EVENT);
                 privacyPolicy = menu.add(_PRIVACYPOLICY);
                 importEvent = menu.add(_IMPORT);
 
+                settings = menu.add(R.string.settings);
             }
             return true;
         } else {

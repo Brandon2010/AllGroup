@@ -6,11 +6,16 @@
     android:background="#fff"
     tools:context="com.cmu.mobilepervasive.allgroup.CategoryActivity"
     >
-
     <ListView
+        android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/listView"
+        android:padding="5dp"
+        android:divider="#00FFFFFF"
+        android:dividerHeight="10dp"
+        android:layout_gravity="top"
+        android:transcriptMode="alwaysScroll"
+        android:listSelector="@android:color/transparent"
         />
 
 </RelativeLayout>
