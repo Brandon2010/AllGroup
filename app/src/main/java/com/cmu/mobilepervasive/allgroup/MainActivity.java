@@ -30,20 +30,18 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 
-<<<<<<< HEAD
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
-=======
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
->>>>>>> daf2791ba47c0687d50ada5190b4644e9e6eb099
 
 
 public class MainActivity extends ActionBarActivity {
@@ -68,7 +66,7 @@ public class MainActivity extends ActionBarActivity {
     public static Semaphore semInner = new Semaphore(1, false);
     public static Semaphore semUserCate = new Semaphore(1, false);
 
-    public static Long userId;
+    public static long userId = -1;
 
     private UiLifecycleHelper uiHelper;
     private Session.StatusCallback callback =
@@ -224,12 +222,19 @@ public class MainActivity extends ActionBarActivity {
             SelectionFragment sf = (SelectionFragment)fragments[SELECTION];
             List<Map<String, Object>> filterdata = sf.getFilterData();
             ArrayList<String> list = new ArrayList<>();
+
+            Bundle bundle = new Bundle();
+            //Map<String, Long> map = new HashMap<>();
+
             for(int i = 0; i < filterdata.size(); i++){
                 list.add((String)filterdata.get(i).get("name"));
+                //map.put((String)filterdata.get(i).get("name"), (Long)filterdata.get(i).get("cateId"));
+                bundle.putLong((String)filterdata.get(i).get("name"), (Long)filterdata.get(i).get("cateId"));
             }
 
             Intent intent = new Intent(MainActivity.this, NewEventActivity.class);
             intent.putStringArrayListExtra("filterData", list);
+            intent.putExtra("bundle", bundle);
             startActivity(intent);
         }
         else if(item.equals(newEvent)){

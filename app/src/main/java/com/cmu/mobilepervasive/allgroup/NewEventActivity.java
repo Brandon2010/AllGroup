@@ -72,6 +72,7 @@ public class NewEventActivity extends ActionBarActivity {
         ArrayAdapter<String> adapterCategory = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, getIntent().getStringArrayListExtra("filterData"));
 
+        final Bundle bundle = getIntent().getBundleExtra("bundle");
 
         adapterYear.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         adapterMonth.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -98,7 +99,9 @@ public class NewEventActivity extends ActionBarActivity {
                 String selectedName = editName.getText().toString();
                 String selectedDetail = editDetail.getText().toString();
 
-                new CreateEventAsyncTask().execute(selectedName, selectedTime, selectedLocation, selectedDetail, selectedCate);
+                String cateId = String.valueOf(bundle.getLong(selectedCate));
+
+                new CreateEventAsyncTask().execute(selectedName, selectedTime, selectedLocation, selectedDetail, /*selectedCate, */cateId);
 
                 Intent intent = new Intent(NewEventActivity.this, MainActivity.class);
                 startActivity(intent);
@@ -169,7 +172,7 @@ public class NewEventActivity extends ActionBarActivity {
                 StringBuffer params = new StringBuffer();
                 //TODO: cateId is hardcoded as 1
                 params.append("eventOperation=add&cateId=")
-                        .append(1).append("&name=")
+                        .append(arg0[4]).append("&name=")
                         .append(arg0[0]).append("&time=")
                         .append(arg0[1]).append("&location=")
                         .append(arg0[2]).append("&description=")

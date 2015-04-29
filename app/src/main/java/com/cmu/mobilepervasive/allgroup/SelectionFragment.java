@@ -43,7 +43,9 @@ public class SelectionFragment extends Fragment {
     private SimpleAdapter sa;
     private View loadingView;
     private boolean isEnd = false;
-    private long userId = 1;
+    //private long MainActivity.userId = -1;
+
+    //private boolean isInit = true;
 
     Handler handler = new Handler() {
         public void handleMessage(Message paramMessage) {
@@ -92,13 +94,18 @@ public class SelectionFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         Log.d(TAG, "Into onCreateView");
-        try {
-            MainActivity.semUserCate.acquire();
-            //semUserCate.acquire();
+
+        if (MainActivity.userId <= 0) {
+            try {
+                MainActivity.semUserCate.acquire();
+                //semUserCate.acquire();
+            }
+            catch(Exception e) {
+                e.printStackTrace();
+            }
         }
-        catch(Exception e) {
-            e.printStackTrace();
-        }
+
+        //MainActivity.userId = MainActivity.MainActivity.userId;
 
         // Inflate the layout for this fragment
         //super.onCreateView(inflater, container, savedInstanceState);
@@ -115,26 +122,30 @@ public class SelectionFragment extends Fragment {
         Thread t = new Thread() {
             @Override
             public void run() {
-                try {
-                    Log.d(TAG, "Before in run acquire");
-                    MainActivity.semUserCate.acquire();
-                    Log.d(TAG, "After in run acquire");
-                }
-                catch (Exception e) {
-                    e.printStackTrace();
+
+                Log.d(TAG, "MainActivity.userId: " + MainActivity.userId);
+                if (MainActivity.userId <= 0) {
+                    try {
+                        Log.d(TAG, "Before in run acquire");
+                        MainActivity.semUserCate.acquire();
+                        MainActivity.semUserCate.release();
+                        Log.d(TAG, "After in run acquire");
+                    }
+                    catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
 
-                //String userId = getArguments().getString("userId");
-                Long userId = MainActivity.userId;
-                Log.d(TAG, "userId: " + userId);
+                //userId = MainActivity.userId;
+                Log.d(TAG, "userId: " + MainActivity.userId);
 
-                String url = getResources().getText(R.string.host) + "CategoryServlet?cateOperation=getId&userId=" + userId;
+                String url = getResources().getText(R.string.host) + "CategoryServlet?cateOperation=getId&userId=" + MainActivity.userId;
                 new GetCateAsyncTask().execute(url);
             }
         };
         t.start();
 
-//        String url = getResources().getText(R.string.host) + "CategoryServlet?cateOperation=getId&userId=1";
+//        String url = getResources().getText(R.string.host) + "CategoryServlet?cateOperation=getId&MainActivity.userId=1";
 //        new GetCateAsyncTask().execute(url);
         listView = (ListView) category_view.findViewById((R.id.category_list));
 
@@ -196,10 +207,9 @@ public class SelectionFragment extends Fragment {
     }
 
     public void updateListView(String category) {
-       new CreateCateAsyncTask().execute(category);
+        new CreateCateAsyncTask().execute(category);
 
     }
-
     public void serverDataArrived(List list, boolean isEnd) {
         this.isEnd = isEnd;
         Iterator iter = list.iterator();
@@ -374,8 +384,8 @@ public class SelectionFragment extends Fragment {
                 connection.setDoInput(true);
                 connection.setDoOutput(true);
                 StringBuffer params = new StringBuffer();
-                params.append("cateOperation=create&userId=")
-                        .append(userId).append("&name=")
+                params.append("cateOperation=create&MainActivity.userId=")
+                        .append(MainActivity.userId).append("&name=")
                         .append(arg0[0]);
                 byte[] bypes = params.toString().getBytes();
                 connection.getOutputStream().write(bypes);
