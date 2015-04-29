@@ -40,6 +40,7 @@ public class NewEventActivity extends ActionBarActivity {
     private Spinner time;
     private Spinner category;
     private Button doneButton;
+    private Button addFriendsButton;
     private EditText editName;
     private EditText editLoation;
     private EditText editDetail;
@@ -125,6 +126,15 @@ public class NewEventActivity extends ActionBarActivity {
                 new CreateEventAsyncTask().execute(selectedName, selectedTime, selectedLocation, selectedDetail, /*selectedCate, */cateId);
 
                 Intent intent = new Intent(NewEventActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        addFriendsButton = (Button) findViewById(R.id.newevent_add_button);
+        addFriendsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(NewEventActivity.this, AddFriendActivity.class);
                 startActivity(intent);
             }
         });
