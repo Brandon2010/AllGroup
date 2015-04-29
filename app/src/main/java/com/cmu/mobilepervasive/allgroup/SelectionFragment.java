@@ -370,8 +370,10 @@ public class SelectionFragment extends Fragment {
             filterData = result;
 
             if (MainActivity.state == MainActivity.IMPORT) {
-                Log.d(TAG, "Before release semImport");
+                Log.d(TAG, "createCate: Before release semImport: " + MainActivity.semImport.availablePermits());
                 MainActivity.semImport.release();
+                Log.d(TAG, "createCate: After release semImport: " + MainActivity.semImport.availablePermits());
+
             }
 
             List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();

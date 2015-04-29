@@ -177,7 +177,7 @@ public class PostActivity extends ActionBarActivity {
                 HashMap<String, Object> item = new HashMap<String, Object>();
                 item.put("title", posts.get(i).get("username").toString());
                 item.put("info", posts.get(i).get("content").toString());
-                item.put("icon", R.drawable.shan);
+                item.put("icon", R.drawable.zhengyang);
                 list.add(item);
             }
             sa = new SimpleAdapter(PostActivity.this, list, R.layout.post_item,
@@ -269,7 +269,7 @@ public class PostActivity extends ActionBarActivity {
                 HashMap<String, Object> item = new HashMap<String, Object>();
                 item.put("title", posts.get(i).get("username").toString());
                 item.put("info", posts.get(i).get("content").toString());
-                item.put("icon", R.drawable.shan);
+                item.put("icon", R.drawable.zhengyang);
                 list.add(item);
             }
             sa = new SimpleAdapter(PostActivity.this, list, R.layout.post_item,
