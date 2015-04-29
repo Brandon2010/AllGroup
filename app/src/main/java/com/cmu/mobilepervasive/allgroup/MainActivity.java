@@ -5,22 +5,40 @@ package com.cmu.mobilepervasive.allgroup;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcel;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.cmu.allgroup.utils.JsonTools;
 import com.facebook.AppEventsLogger;
+import com.facebook.HttpMethod;
+import com.facebook.Request;
+import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.Semaphore;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +61,12 @@ public class MainActivity extends ActionBarActivity {
     private MenuItem newEvent;
   //  private ImageButton edit;
     private boolean isResumed = false;
+
+    // TODO Use semaphore temporarily
+    public static Semaphore semInner = new Semaphore(1, false);
+    public static Semaphore semUserCate = new Semaphore(1, false);
+
+    public static long userId = -1;
 
     private UiLifecycleHelper uiHelper;
     private Session.StatusCallback callback =
@@ -130,6 +154,9 @@ public class MainActivity extends ActionBarActivity {
         if (session != null && session.isOpened()) {
             // if the session is already open,
             // try to show the selection fragment
+
+            Log.d(TAG, "onResumeFragments");
+
             showFragment(SELECTION, false);
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             getSupportActionBar().setHomeButtonEnabled(true);
@@ -195,12 +222,19 @@ public class MainActivity extends ActionBarActivity {
             SelectionFragment sf = (SelectionFragment)fragments[SELECTION];
             List<Map<String, Object>> filterdata = sf.getFilterData();
             ArrayList<String> list = new ArrayList<>();
+
+            Bundle bundle = new Bundle();
+            //Map<String, Long> map = new HashMap<>();
+
             for(int i = 0; i < filterdata.size(); i++){
                 list.add((String)filterdata.get(i).get("name"));
+                //map.put((String)filterdata.get(i).get("name"), (Long)filterdata.get(i).get("cateId"));
+                bundle.putLong((String)filterdata.get(i).get("name"), (Long)filterdata.get(i).get("cateId"));
             }
 
             Intent intent = new Intent(MainActivity.this, NewEventActivity.class);
             intent.putStringArrayListExtra("filterData", list);
+            intent.putExtra("bundle", bundle);
             startActivity(intent);
         }
         else if(item.equals(newEvent)){
@@ -267,23 +301,89 @@ public class MainActivity extends ActionBarActivity {
             if (state.isOpened()) {
                 // If the session state is open:
                 // Show the authenticated fragment
-                showFragment(SELECTION, false);
-                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-                getSupportActionBar().setHomeButtonEnabled(true);
-                getSupportActionBar().setDisplayShowHomeEnabled(false);
-                getSupportActionBar().setDisplayShowTitleEnabled(false);
-                getSupportActionBar().setDisplayShowCustomEnabled(true);
-                View actionbarLayout = LayoutInflater.from(this).inflate(R.layout.actionbar_layout, null);
-                getSupportActionBar().setCustomView(actionbarLayout);
-//                edit = (ImageButton) findViewById(R.id.right_imbt);
-//                edit.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        Log.v(TAG, "click on plus");
-//                        showEditDialog();
-//                    }
-//                });
-                getSupportActionBar().show();
+
+                Log.d(TAG, "onSessionStateChange");
+                // TODO Connect to FB
+                Log.d(TAG, "Try to request to FB");
+                new Request(
+                        session,
+                        "/me",
+                        null,
+                        HttpMethod.GET,
+                        new Request.Callback() {
+                            public void onCompleted(Response response) {
+                                //JSONObject json = response.getGraphObject().getInnerJSONObject();
+                                //Log.d("RESPONSE", json.toString());
+
+                                String userInfo = response.getRawResponse();
+                                Log.d("RESPONSE", userInfo);
+
+                                Map<String, Object> user = JsonTools.getUserFromFB(userInfo);
+                                Long facebookId = (Long) user.get("facebookId");
+                                String name = (String) user.get("name");
+                                //name.replace(" ", "%20");
+                                //name = name.replaceAll("\\s+", "%20");
+
+                                //Log.d(TAG, "After replace: " + name);
+
+                                String url = getResources().getText(R.string.host)
+                                        + "UserServlet?userOperation=searchID&facebookId=" + facebookId + "&name=" + name;
+                                url = url.replaceAll("\\s+", "%20");
+
+                                try {
+                                    //Log.d(TAG, "Before semInner acquire");
+                                    semInner.acquire();
+                                }
+                                catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                                new GetUserAsyncTask().execute(url);
+
+                                try {
+                                    Log.d(TAG, "Before semInner acquire");
+                                    semInner.acquire();
+                                }
+                                catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+
+                                Log.d(TAG, "Before semUserCate release");
+                                semUserCate.release();
+
+                                Log.d(TAG, "After semUserCate release");
+
+                                showFragment(SELECTION, false);
+                                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                                getSupportActionBar().setHomeButtonEnabled(true);
+                                getSupportActionBar().setDisplayShowHomeEnabled(false);
+                                getSupportActionBar().setDisplayShowTitleEnabled(false);
+                                getSupportActionBar().setDisplayShowCustomEnabled(true);
+                                View actionbarLayout = LayoutInflater.from(getApplicationContext()).inflate(R.layout.actionbar_layout, null);
+                                getSupportActionBar().setCustomView(actionbarLayout);
+                                getSupportActionBar().show();
+
+                            }
+                        }
+                ).executeAsync();
+
+//                showFragment(SELECTION, false);
+//                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+//                getSupportActionBar().setHomeButtonEnabled(true);
+//                getSupportActionBar().setDisplayShowHomeEnabled(false);
+//                getSupportActionBar().setDisplayShowTitleEnabled(false);
+//                getSupportActionBar().setDisplayShowCustomEnabled(true);
+//                View actionbarLayout = LayoutInflater.from(this).inflate(R.layout.actionbar_layout, null);
+//                getSupportActionBar().setCustomView(actionbarLayout);
+////                edit = (ImageButton) findViewById(R.id.right_imbt);
+////                edit.setOnClickListener(new View.OnClickListener() {
+////                    @Override
+////                    public void onClick(View v) {
+////                        Log.v(TAG, "click on plus");
+////                        showEditDialog();
+////                    }
+////                });
+//                getSupportActionBar().show();
 
 
             } else if (state.isClosed()) {
@@ -380,6 +480,119 @@ public class MainActivity extends ActionBarActivity {
 //            });
         } else {
             getSupportActionBar().setTitle(R.string.app_name);
+        }
+    }
+
+
+
+    public class GetUserAsyncTask extends AsyncTask<String, Integer, Map<String, Object>> {
+        /*
+		 * (non-Javadoc)
+		 *
+		 * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
+		 */
+        @Override
+        protected void onPostExecute(Map<String, Object> result) {
+            // TODO Auto-generated method stub
+
+            Log.d(TAG, "Enter postExecute");
+
+            super.onPostExecute(result);
+            if(result == null) {
+                Toast.makeText(getApplicationContext(), "Network Problem", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+//            Bundle bundle = new Bundle();
+//            bundle.putLong("userId", (Long) result.get("userId"));
+//
+//            Log.d(TAG, "Before setArguments");
+//
+//            fragments[SELECTION].setArguments(new Bundle());
+
+//            userId = (Long) result.get("userId");
+//
+//            Log.d(TAG, "Before semInner release");
+//            semInner.release();
+//            Log.d(TAG, "After semInner release");
+
+            //serverDataArrived(result, true);
+        }
+
+        /*
+         * (non-Javadoc)
+         *
+         * @see android.os.AsyncTask#onPreExecute()
+         */
+        @Override
+        protected void onPreExecute() {
+            // TODO Auto-generated method stub
+            super.onPreExecute();
+        }
+
+        @Override
+
+        protected Map<String, Object> doInBackground(String... arg0) {
+            Map<String, Object> user = null;
+
+            System.out.println("In AsncTask!!");
+            try {
+                Log.v(TAG, arg0[0]);
+                URL url = new URL(arg0[0]);
+                HttpURLConnection connection = (HttpURLConnection) url
+                        .openConnection();
+                connection.setConnectTimeout(3000);
+                connection.setRequestMethod("GET");
+                connection.setDoInput(true);
+                int code = connection.getResponseCode();
+                if (code == 200) {
+                    String jsonString = ChangeInputStream(connection
+                            .getInputStream());
+                    user = (Map<String, Object>) JsonTools
+                            .getUser("user", jsonString);
+
+                    Log.d(TAG, jsonString);
+                }
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+            // TODO Temporarily release semaphore here, should exists better solution?
+            userId = (Long) user.get("userId");
+
+            Log.d(TAG, "Before semInner release");
+            semInner.release();
+            Log.d(TAG, "After semInner release");
+
+            Log.d(TAG, "background end");
+
+            return user;
+        }
+
+        /**
+         * Get json string
+         *
+         * @param inputStream
+         * @return
+         */
+        public String ChangeInputStream(InputStream inputStream) {
+            String jsonString = "";
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            int len = 0;
+            byte[] data = new byte[1024];
+
+            try {
+                while ((len = inputStream.read(data)) != -1) {
+                    outputStream.write(data, 0, len);
+                }
+                jsonString = new String(outputStream.toByteArray());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return jsonString;
         }
     }
 

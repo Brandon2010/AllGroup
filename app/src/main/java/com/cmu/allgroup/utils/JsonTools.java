@@ -117,4 +117,35 @@ public class JsonTools {
         }
         return users;
     }
+
+    public static Map<String, Object> getUser(String key, String jsonString) {
+        Map<String, Object> user = new HashMap<>();
+        try {
+            JSONObject jsonObject = new JSONObject(jsonString);
+            JSONObject userJsonObject = jsonObject.getJSONObject(key);
+
+            user.put("facebookId", userJsonObject.getLong("facebookId"));
+            user.put("name", userJsonObject.getString("name"));
+            user.put("userId", userJsonObject.getLong("userId"));
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return user;
+    }
+
+    public static Map<String, Object> getUserFromFB(String jsonString) {
+        Map<String, Object> user = new HashMap<>();
+        try {
+            JSONObject jsonObject = new JSONObject(jsonString);
+
+            user.put("facebookId", jsonObject.getLong("id"));
+            user.put("name", jsonObject.getString("name"));
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return user;
+    }
+
 }

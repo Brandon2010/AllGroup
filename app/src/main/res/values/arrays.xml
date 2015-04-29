@@ -87,6 +87,9 @@
     <string-array name="category_array">
         <item>Party</item>
         <item>Meeting</item>
+        <item>Anniversary</item>
+        <item>Sports</item>
+        <item>Not Categorized</item>
 
     </string-array>
 
