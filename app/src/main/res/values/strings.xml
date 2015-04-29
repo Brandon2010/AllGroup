@@ -25,7 +25,7 @@
     <string name="cancel">Cancel</string>
     <string name='create'>Create</string>
     <string name='title_activity_privacy_policy'>PrivacyPolicyActivity</string>
-    <string name="host">http://128.237.204.196:8080/AllGroupServerSide/servlet/</string>
+    <string name="host">http://24.131.19.58:8080/AllGroupServerSide/servlet/</string>
 
 
 </resources>
