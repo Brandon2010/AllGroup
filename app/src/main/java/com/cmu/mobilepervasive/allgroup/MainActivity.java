@@ -74,6 +74,7 @@ public class MainActivity extends ActionBarActivity {
     public static Semaphore semUserCate = new Semaphore(1, false);
     public static Semaphore semImport = new Semaphore(1, false);
 
+
     public static final int NORMAL = 0, IMPORT = 1;
     public static int state = NORMAL;
 
