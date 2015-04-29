@@ -50,6 +50,8 @@ public class MainActivity extends ActionBarActivity {
     private static final String _EVENT = "New Event";
     private static final String _Category = "New Category";
     private static final String _PRIVACYPOLICY = "Privacy Policy";
+    private static final String _IMPORT = "Import FB Events";
+
     private static final int SPLASH = 0;
     private static final int SELECTION = 1;
     private static final int SETTINGS = 2;
@@ -59,6 +61,7 @@ public class MainActivity extends ActionBarActivity {
     private MenuItem privacyPolicy;
     private MenuItem newCategory;
     private MenuItem newEvent;
+    private MenuItem importEvent;
   //  private ImageButton edit;
     private boolean isResumed = false;
 
@@ -188,10 +191,11 @@ public class MainActivity extends ActionBarActivity {
         // only add the menu when the selection fragment is showing
         if (fragments[SELECTION].isVisible()) {
             if (menu.size() == 0) {
-                newCategory = menu.add(_EVENT);
-                newEvent = menu.add(_Category);
+                newCategory = menu.add(_Category);
+                newEvent = menu.add(_EVENT);
                 settings = menu.add(R.string.settings);
                 privacyPolicy = menu.add(_PRIVACYPOLICY);
+                importEvent = menu.add(_IMPORT);
 
             }
             return true;
@@ -201,6 +205,7 @@ public class MainActivity extends ActionBarActivity {
             privacyPolicy = null;
             newEvent = null;
             newCategory = null;
+            importEvent = null;
         }
         return false;
     }
@@ -218,7 +223,7 @@ public class MainActivity extends ActionBarActivity {
             Intent intent = new Intent(MainActivity.this, PrivacyPolicyActivity.class);
             startActivity(intent);
         }
-        else if(item.equals(newCategory)){
+        else if(item.equals(newEvent)){
             SelectionFragment sf = (SelectionFragment)fragments[SELECTION];
             List<Map<String, Object>> filterdata = sf.getFilterData();
             ArrayList<String> list = new ArrayList<>();
@@ -237,7 +242,7 @@ public class MainActivity extends ActionBarActivity {
             intent.putExtra("bundle", bundle);
             startActivity(intent);
         }
-        else if(item.equals(newEvent)){
+        else if(item.equals(newCategory)){
 //            Log.v(TAG, "EDIT");
             AlertDialog.Builder inner = new AlertDialog.Builder(MainActivity.this);
             inner.setTitle(R.string.edit_category);
@@ -269,6 +274,12 @@ public class MainActivity extends ActionBarActivity {
             AlertDialog alertDialog = inner.create();
             alertDialog.show();
         }
+
+        else if (item.equals(importEvent)) {
+
+
+        }
+
         return false;
     }
 
