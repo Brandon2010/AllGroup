@@ -116,7 +116,7 @@ public class CategoryActivity extends ActionBarActivity {
                 intent.putExtra("description",  (String)events.get((int)id).get("description"));
                 intent.putExtra("location",  (String)events.get((int)id).get("location"));
                 intent.putExtra("time",  (String)events.get((int)id).get("time"));
-
+                intent.putExtra("eventId", (long)events.get((int)id).get("eventId"));
                 startActivity(intent);
 
             }

@@ -28,8 +28,7 @@ public class JsonTools {
 
         ArrayList<Map<String, Object>> events = new ArrayList<Map<String, Object>>();
         try {
-            jsonString = jsonString.substring(0, jsonString.length() - 7);
-            jsonString += "\"}]}";
+
             Log.v("DEBUG", jsonString);
             JSONObject jsonObject = new JSONObject(jsonString);
             JSONArray jsonArray = jsonObject.getJSONArray(key);
@@ -67,9 +66,11 @@ public class JsonTools {
                 map.put("postId", postJsonObject.getLong("postId"));
                 map.put("eventId", postJsonObject.getLong("eventId"));
                 map.put("content", postJsonObject.getString("content"));
-                SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                map.put("time", sdfDate.format(postJsonObject.getString("time")));
+//                SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                map.put("time", postJsonObject.getString("time"));
                 map.put("userId", postJsonObject.getLong("userId"));
+                JSONObject userJsonObject = postJsonObject.getJSONObject("user");
+                map.put("username", userJsonObject.getString("name"));
                 posts.add(map);
             }
         } catch (JSONException e) {
