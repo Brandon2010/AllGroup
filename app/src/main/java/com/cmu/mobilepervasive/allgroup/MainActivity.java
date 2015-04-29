@@ -7,19 +7,18 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Parcel;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+//import android.R;
 
 import com.cmu.allgroup.utils.JsonTools;
 import com.facebook.AppEventsLogger;
@@ -36,12 +35,10 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.Semaphore;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Semaphore;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -218,7 +215,7 @@ public class MainActivity extends ActionBarActivity {
             Intent intent = new Intent(MainActivity.this, PrivacyPolicyActivity.class);
             startActivity(intent);
         }
-        else if(item.equals(newCategory)){
+        else if(item.equals(newEvent)){
             SelectionFragment sf = (SelectionFragment)fragments[SELECTION];
             List<Map<String, Object>> filterdata = sf.getFilterData();
             ArrayList<String> list = new ArrayList<>();
@@ -237,7 +234,7 @@ public class MainActivity extends ActionBarActivity {
             intent.putExtra("bundle", bundle);
             startActivity(intent);
         }
-        else if(item.equals(newEvent)){
+        else if(item.equals(newCategory)){
 //            Log.v(TAG, "EDIT");
             AlertDialog.Builder inner = new AlertDialog.Builder(MainActivity.this);
             inner.setTitle(R.string.edit_category);
