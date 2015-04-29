@@ -43,7 +43,7 @@ public class PostActivity extends ActionBarActivity {
     private boolean isEnd = false;
 
     //private ArrayList<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-    private List<Map<String, Object>> posts = null;
+    private List<Map<String, Object>> posts = new ArrayList<>();
 
     Handler handler = new Handler() {
         public void handleMessage(android.os.Message paramMessage) {
@@ -100,7 +100,10 @@ public class PostActivity extends ActionBarActivity {
                 String content = editText.getText().toString();
                 DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Calendar cal = Calendar.getInstance();
-                new sendPost().execute(userId, eventId, content, dateFormat.format(cal.getTime()));
+                String userId = String.valueOf(MainActivity.userId);
+                String evenId = String.valueOf(eventId);
+
+                new sendPost().execute(evenId, content, dateFormat.format(cal.getTime()), userId);
 //                Map<String, Object> map = new HashMap<String, Object>();
 //                //TODO: CHANGE TITLE, Hardcoded icon
 //                map.put("title", "Zhengyang Zuo");
@@ -172,12 +175,12 @@ public class PostActivity extends ActionBarActivity {
             List<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
             for (int i = 0; i < posts.size(); i++) {
                 HashMap<String, Object> item = new HashMap<String, Object>();
-                item.put("title", posts.get(i).get("userName").toString());
+                item.put("title", posts.get(i).get("username").toString());
                 item.put("info", posts.get(i).get("content").toString());
                 item.put("icon", R.drawable.shan);
                 list.add(item);
             }
-            sa = new SimpleAdapter(PostActivity.this, posts, R.layout.post_item,
+            sa = new SimpleAdapter(PostActivity.this, list, R.layout.post_item,
                     new String[] {"title", "info", "icon"},
                     new int[] {R.id.post_title, R.id.post_info, R.id.post_icon});
             listView.setAdapter(sa);
@@ -211,7 +214,7 @@ public class PostActivity extends ActionBarActivity {
                     String jsonString = ChangeInputStream(connection
                             .getInputStream());
                     posts = (ArrayList<Map<String, Object>>) JsonTools
-                            .getEvents("posts", jsonString);
+                            .getPosts("posts", jsonString);
                     for(int i = 0; i < posts.size(); i++){
                         Log.v("DEBUG", posts.get(i).toString());
                     }
@@ -264,12 +267,12 @@ public class PostActivity extends ActionBarActivity {
             List<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
             for (int i = 0; i < posts.size(); i++) {
                 HashMap<String, Object> item = new HashMap<String, Object>();
-                item.put("title", posts.get(i).get("userName").toString());
+                item.put("title", posts.get(i).get("username").toString());
                 item.put("info", posts.get(i).get("content").toString());
                 item.put("icon", R.drawable.shan);
                 list.add(item);
             }
-            sa = new SimpleAdapter(PostActivity.this, posts, R.layout.post_item,
+            sa = new SimpleAdapter(PostActivity.this, list, R.layout.post_item,
                     new String[] {"title", "info", "icon"},
                     new int[] {R.id.post_title, R.id.post_info, R.id.post_icon});
             listView.setAdapter(sa);
@@ -290,7 +293,7 @@ public class PostActivity extends ActionBarActivity {
 
         @Override
         protected List<Map<String, Object>> doInBackground(String... arg0) {
-            ArrayList<Map<String, Object>> categories = null;
+            ArrayList<Map<String, Object>> tmpPost = null;
 
             System.out.println("In AsncTask!!");
             try {
@@ -303,7 +306,7 @@ public class PostActivity extends ActionBarActivity {
                 connection.setDoInput(true);
                 connection.setDoOutput(true);
                 StringBuffer params = new StringBuffer();
-                params.append("postOperation=add&userId=").append(userId).
+                params.append("postOperation=add&userId=").append(arg0[3]).
                         append("&eventId=").append(arg0[0]).
                         append("&content=").append(arg0[1]).
                         append("&time=").append(arg0[2]);
@@ -313,17 +316,17 @@ public class PostActivity extends ActionBarActivity {
                 if (code == 200) {
                     String jsonString = ChangeInputStream(connection
                             .getInputStream());
-                    categories = (ArrayList<Map<String, Object>>) JsonTools
-                            .getCategories("categories", jsonString);
+                    tmpPost = (ArrayList<Map<String, Object>>) JsonTools
+                            .getPosts("posts", jsonString);
                 }
-                System.out.println(categories.size() + "hits");
+                System.out.println(tmpPost.size() + "hits");
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-            return categories;
+            return tmpPost;
         }
 
         /**
