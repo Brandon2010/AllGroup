@@ -5,9 +5,8 @@ package com.cmu.mobilepervasive.allgroup;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.os.Parcel;
+import android.net.Uri;
+import android.os.*;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -25,10 +24,14 @@ import com.cmu.allgroup.utils.JsonTools;
 import com.facebook.AppEventsLogger;
 import com.facebook.HttpMethod;
 import com.facebook.Request;
+import com.facebook.RequestBatch;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
+import com.facebook.model.GraphObject;
+
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -38,6 +41,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.Semaphore;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,6 +72,10 @@ public class MainActivity extends ActionBarActivity {
     // TODO Use semaphore temporarily
     public static Semaphore semInner = new Semaphore(1, false);
     public static Semaphore semUserCate = new Semaphore(1, false);
+    public static Semaphore semImport = new Semaphore(1, false);
+
+    public static final int NORMAL = 0, IMPORT = 1;
+    public static int state = NORMAL;
 
     public static long userId = -1;
 
@@ -80,6 +88,8 @@ public class MainActivity extends ActionBarActivity {
                     onSessionStateChange(session, state, exception);
                 }
             };
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -276,6 +286,134 @@ public class MainActivity extends ActionBarActivity {
 
         else if (item.equals(importEvent)) {
 
+            Log.d(TAG, "Click Import");
+
+            Thread t = new Thread() {
+                public void run() {
+                    Session session = Session.getActiveSession();
+
+                    if (session != null && session.isOpened()) {
+
+                        Log.d(TAG, "Session opened");
+
+                        try {
+                            Log.d(TAG, "Before acquire semImport 1");
+                            semImport.acquire();
+                        }
+                        catch(Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        // TODO Getting event IDs
+                        final List<String> eventIDs = new ArrayList<>();
+                        Response eventsResponse = new Request(
+                                session,
+                                "/me/events",
+                                null,
+                                HttpMethod.GET,
+                                null
+                        ).executeAndWait();
+                        JSONObject jsonEvents = eventsResponse.getGraphObject().getInnerJSONObject();
+                        Log.d(TAG, jsonEvents.toString());
+                        eventIDs.addAll(JsonTools.getEventIDsFromFB("data", jsonEvents.toString()));
+
+                        Log.d(TAG, "Between getting eventIDs and events");
+
+                        // TODO Getting events
+                        List<Request> requests = new ArrayList<>();
+                        for (String id : eventIDs) {
+                            //Long id = (Long) map.get("id");
+                            requests.add(
+                                new Request(
+                                    session,
+                                    "/" + id,
+                                    null,
+                                    HttpMethod.GET,
+                                    null
+                            ));
+                        }
+                        RequestBatch batch = new RequestBatch(requests);
+                        List<Response> responses = batch.executeAndWait();
+
+                        final List<Map<String, Object>> events = new ArrayList<>();
+
+                        for (Response res : responses) {
+                            Log.d(TAG, res.getRawResponse());
+                            events.add(JsonTools.getEventFromFB(res.getRawResponse()));
+                        }
+
+                        if (events == null) {
+                            return;
+                        }
+
+                        // TODO Create new category "From Facebook"
+                        SelectionFragment sf = (SelectionFragment)fragments[SELECTION];
+                        List<Map<String, Object>> categories = sf.getFilterData();
+                        String fbCateName = getString(R.string.facebook_category);
+                        long cateId = -1;
+
+                        for (Map<String, Object> cate : categories) {
+                            if (cate.get("name").equals(fbCateName)) {
+                                cateId = (Long) cate.get("cateId");
+                            }
+                        }
+                        if (cateId < 0) {   // Need to create new category
+                            sf.updateListView(fbCateName);
+
+                            try {
+                                Log.d(TAG, "Before acquire semImport 2");
+                                semImport.acquire();
+                            }
+                            catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            //Log.d(TAG, "Before ")
+                            //semImport.release();
+                            Log.d(TAG, "Import: Get categories");
+
+                            categories = sf.getFilterData();
+                            for (Map<String, Object> cate : categories) {
+                                if (cate.get("name").equals(fbCateName)) {
+                                    cateId = (Long) cate.get("cateId");
+
+                                }
+                            }
+
+                        }
+                        // TODO Create events
+
+                        for (Map<String, Object> event : events) {
+                            event.put("cateId", cateId);
+                            String time = (String) event.get("time");
+                            time = time.replace("T", " ").substring(0, time.length() - 5);
+                            Log.d(TAG, "Changed time: " + time);
+
+                            //event.put("time", time);
+
+                            new CreateEventAsyncTask()
+                                    .execute((String) event.get("name"),
+                                            time,
+                                            (String) event.get("location"),
+                                            (String) event.get("description"),
+                                            String.valueOf(cateId));
+
+                            try {
+                                Log.d(TAG, "Before acquire semImport 2");
+                                semImport.acquire();
+                            }
+                            catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                        state = NORMAL;
+                        sf.serverDataArrived(categories, true);
+                        Log.d(TAG, "Finish importing.");
+                    }
+                }
+            };
+
+            t.start();
 
         }
 
@@ -495,6 +633,7 @@ public class MainActivity extends ActionBarActivity {
 
 
 
+
     public class GetUserAsyncTask extends AsyncTask<String, Integer, Map<String, Object>> {
         /*
 		 * (non-Javadoc)
@@ -606,4 +745,104 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
+
+    public class CreateEventAsyncTask extends
+            AsyncTask<String, Integer, List<Map<String, Object>>> {
+
+        /*
+         * (non-Javadoc)
+         *
+         * @see android.os.AsyncTask#onPreExecute()
+         */
+        @Override
+        protected void onPreExecute() {
+            // TODO Auto-generated method stub
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(List<Map<String, Object>> result) {
+            if (MainActivity.state == MainActivity.IMPORT) {
+                Log.d("DEBUG", "in CreateEventAsync before release semImport");
+                MainActivity.semImport.release();
+            }
+        }
+
+        /*
+         * (non-Javadoc)
+         *
+         * @see android.os.AsyncTask#doInBackground(Params[])
+         */
+        @Override
+        protected List<Map<String, Object>> doInBackground(String... arg0) {
+            ArrayList<Map<String, Object>> events = null;
+
+            System.out.println("In AsncTask!!");
+            try {
+                URL url = new URL(getResources().getText(R.string.host)
+                        + "EventServlet");
+                HttpURLConnection connection = (HttpURLConnection) url
+                        .openConnection();
+                connection.setConnectTimeout(3000);
+                connection.setRequestMethod("POST");
+                connection.setDoInput(true);
+                connection.setDoOutput(true);
+                StringBuffer params = new StringBuffer();
+                //TODO: cateId is hardcoded as 1
+                params.append("eventOperation=add&cateId=")
+                        .append(arg0[4]).append("&name=")
+                        .append(arg0[0]).append("&time=")
+                        .append(arg0[1]).append("&location=")
+                        .append(arg0[2]).append("&description=")
+                        .append(/*Uri.encode(arg0[3])*/ "description");
+
+
+                Log.v("DEBUG", params.toString());
+                byte[] bypes = params.toString().getBytes();
+                connection.getOutputStream().write(bypes);
+                int code = connection.getResponseCode();
+                if (code == 200) {
+                    String jsonString = ChangeInputStream(connection
+                            .getInputStream());
+                    events = (ArrayList<Map<String, Object>>) JsonTools
+                            .getEvents("events", jsonString);
+                    for(int i = 0; i < events.size(); i++){
+                        Log.v("DEBUG", events.get(i).toString());
+                    }
+                }
+                System.out.println(events.size() + "hits");
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            return events;
+        }
+
+        /**
+         * Get json string
+         *
+         * @param inputStream
+         * @return
+         */
+        public String ChangeInputStream(InputStream inputStream) {
+            String jsonString = "";
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            int len = 0;
+            byte[] data = new byte[1024];
+
+            try {
+                while ((len = inputStream.read(data)) != -1) {
+                    outputStream.write(data, 0, len);
+                }
+                jsonString = new String(outputStream.toByteArray());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return jsonString;
+        }
+
+
+    }
 }

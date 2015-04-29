@@ -324,6 +324,8 @@ public class SelectionFragment extends Fragment {
         return filterData;
     }
 
+
+
     public class CreateCateAsyncTask extends
             AsyncTask<String, Integer, List<Map<String, Object>>> {
 
@@ -340,6 +342,12 @@ public class SelectionFragment extends Fragment {
                 return;
             }
             filterData = result;
+
+            if (MainActivity.state == MainActivity.IMPORT) {
+                Log.d(TAG, "Before release semImport");
+                MainActivity.semImport.release();
+            }
+
             List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
             for (int i = 0; i < filterData.size(); i++) {
                 HashMap<String, String> item = new HashMap<String, String>();
@@ -350,7 +358,12 @@ public class SelectionFragment extends Fragment {
                     new String[]{"title"}, new int[]{android.R.id.text2});
             listView.setAdapter(sa);
 //            sa.notifyDataSetChanged();
-            serverDataArrived(result, true);
+
+            // TODO Check if MainActivity is importing
+            if (MainActivity.state == MainActivity.NORMAL) {
+                serverDataArrived(result, true);
+            }
+
         }
 
         /*
@@ -384,9 +397,12 @@ public class SelectionFragment extends Fragment {
                 connection.setDoInput(true);
                 connection.setDoOutput(true);
                 StringBuffer params = new StringBuffer();
-                params.append("cateOperation=create&MainActivity.userId=")
+                params.append("cateOperation=create&userId=")
                         .append(MainActivity.userId).append("&name=")
                         .append(arg0[0]);
+
+                Log.d(TAG, "userId: " + MainActivity.userId);
+
                 byte[] bypes = params.toString().getBytes();
                 connection.getOutputStream().write(bypes);
                 int code = connection.getResponseCode();

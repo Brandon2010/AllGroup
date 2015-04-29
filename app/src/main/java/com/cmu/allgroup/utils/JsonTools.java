@@ -16,13 +16,7 @@ import java.util.Map;
  * Created by wangxi on 4/6/15.
  */
 public class JsonTools {
-    /**
-     * Get the place maps
-     *
-     * @param key
-     * @param jsonString
-     * @return
-     */
+
     public static List<Map<String, Object>> getEvents(String key,
                                                       String jsonString) {
 
@@ -147,5 +141,67 @@ public class JsonTools {
         }
         return user;
     }
+
+    public static Map<String, Object> getEventFromFB(String jsonString) {
+
+        Map<String, Object> map = new HashMap<>();
+        try {
+
+            Log.v("DEBUG", jsonString);
+            JSONObject eventJsonObject = new JSONObject(jsonString);
+            //JSONArray jsonArray = jsonObject.getJSONArray(key);
+                //JSONObject eventJsonObject = jsonArray.getJSONObject(i);
+                //Map<String, Object> map = new HashMap<String, Object>();
+                //map.put("id", eventJsonObject.getLong("id"));
+            map.put("name", eventJsonObject.getString("name"));
+            map.put("description", eventJsonObject.getString("description"));
+            map.put("location", eventJsonObject.getString("location"));
+            // SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Log.v("DEBUG", eventJsonObject.getString("start_time"));
+            map.put("time", eventJsonObject.getString("start_time"));
+
+                // map.put("time", sdfDate.format(eventJsonObject.getString("time")));
+//                map.put("picture_address",
+//                        eventJsonObject.getString("picture_address"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return map;
+    }
+
+    public static List<String> getEventIDsFromFB(String key,
+                                                           String jsonString) {
+
+        ArrayList<String> eventIDs = new ArrayList<String>();
+        try {
+
+            Log.v("DEBUG", jsonString);
+            JSONObject jsonObject = new JSONObject(jsonString);
+            JSONArray jsonArray = jsonObject.getJSONArray(key);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject eventJsonObject = jsonArray.getJSONObject(i);
+                eventIDs.add(eventJsonObject.getString("id"));
+
+                //Map<String, Object> map = new HashMap<String, Object>();
+                //map.put("id", eventJsonObject.getLong("id"));
+                //map.put("name", eventJsonObject.getString("name"));
+                //map.put("description", eventJsonObject.getString("description"));
+                //map.put("location", eventJsonObject.getString("location"));
+                // SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                //Log.v("DEBUG", eventJsonObject.getString("start_time"));
+                //map.put("time", eventJsonObject.getString("start_time"));
+
+                // map.put("time", sdfDate.format(eventJsonObject.getString("time")));
+//                map.put("picture_address",
+//                        eventJsonObject.getString("picture_address"));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return eventIDs;
+    }
+
 
 }
