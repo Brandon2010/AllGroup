@@ -1,32 +1,34 @@
 package com.cmu.mobilepervasive.allgroup;
 
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.SimpleAdapter;
+import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.cmu.allgroup.utils.JsonTools;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -41,6 +43,13 @@ public class NewEventActivity extends ActionBarActivity {
     private EditText editName;
     private EditText editLoation;
     private EditText editDetail;
+    private Button upload;
+    private ImageView uploadImage;
+
+    private File tempFile;
+
+    private static final int PHOTO_REQUEST_GALLERY = 1;
+    private static final int PHOTO_REQUEST_CUT = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +116,18 @@ public class NewEventActivity extends ActionBarActivity {
                 startActivity(intent);
             }
         });
+
+        upload = (Button) findViewById(R.id.upload);
+        upload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");
+                startActivityForResult(intent, PHOTO_REQUEST_GALLERY);
+            }
+        });
+
+        uploadImage = (ImageView) findViewById(R.id.imageViewUpload);
 
     }
 
@@ -233,4 +254,34 @@ public class NewEventActivity extends ActionBarActivity {
 
 
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        System.out.println("In Result");
+        System.out.println("RequestCode: " + requestCode);
+        if (requestCode == PHOTO_REQUEST_GALLERY) {
+            System.out.println("In 1");
+            if (data != null) {
+                Uri uri = data.getData();
+                ContentResolver cr = this.getContentResolver();
+                try {
+                    System.out.println(uri);
+                    Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
+                    if (bitmap == null) {
+                        System.out.println("hah");
+                        return;
+                    }
+                    uploadImage.setImageBitmap(bitmap);
+                } catch (FileNotFoundException fe) {
+                    fe.printStackTrace();
+                }
+            }
+
+        }
+
+        System.out.println("End result");
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+
 }

@@ -59,7 +59,8 @@
         <activity
             android:name=".NewEventActivity"
             android:label="@string/title_activity_new_event"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:launchMode="standard">
 
         </activity>
         <activity

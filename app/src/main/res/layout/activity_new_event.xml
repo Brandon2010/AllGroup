@@ -87,6 +87,24 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"/>
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Upload Image"
+            android:id="@+id/upload"
+            android:layout_below="@+id/newevent_linear_1"
+            android:layout_alignParentStart="true"
+            android:layout_margin="10dp"
+            android:background="@color/bg_btn_trans"
+            android:textColor="#FFFFFF" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="150dp"
+            android:id="@+id/imageViewUpload"
+            android:layout_below="@+id/newevent_linear_1"
+            android:layout_alignParentStart="true"/>
+
     </LinearLayout>
 
     <LinearLayout
@@ -118,9 +136,6 @@
         android:textColor="#FFFFFF" />
 
     </LinearLayout>
-
-
-
 
 
 </RelativeLayout>
