@@ -93,23 +93,30 @@ public class JsonTools {
         return cates;
     }
 
-    public static List<Map<String, Object>> getUsers(String key, String jsonString) {
-        ArrayList<Map<String, Object>> users = new ArrayList<>();
+    public static Map<String, Object> getUsers(String key, String jsonString) {
+        Map<String, Object> map = new HashMap<>();
         try {
             JSONObject jsonObject = new JSONObject(jsonString);
-            JSONArray jsonArray = jsonObject.getJSONArray(key);
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject userJsonObject = jsonArray.getJSONObject(i);
-                Map<String, Object> map = new HashMap<>();
-                map.put("facebookId", userJsonObject.getLong("facebookId"));
-                map.put("name", userJsonObject.getString("name"));
-                map.put("userId", userJsonObject.getLong("userId"));
-                users.add(map);
-            }
+//            JSONArray jsonArray = jsonObject.getJSONArray(key);
+//            for (int i = 0; i < jsonArray.length(); i++) {
+//                JSONObject userJsonObject = jsonArray.getJSONObject(i);
+//                Map<String, Object> map = new HashMap<>();
+//                map.put("facebookId", userJsonObject.getLong("facebookId"));
+//                map.put("name", userJsonObject.getString("name"));
+//                map.put("userId", userJsonObject.getLong("userId"));
+//                users.add(map);
+//            }
+
+            JSONObject userObject = jsonObject.getJSONObject(key);
+
+            map.put("facebookId", userObject.getLong("facebookId"));
+            map.put("name", userObject.getString("name"));
+            map.put("userId", userObject.getLong("userId"));
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return users;
+        return map;
     }
 
     public static Map<String, Object> getUser(String key, String jsonString) {
