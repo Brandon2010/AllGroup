@@ -392,7 +392,7 @@ public class SelectionFragment extends Fragment {
                     TextView text1 = (TextView) view.findViewById(android.R.id.text2);
                     text1.setTextSize(18);
                     text1.setPadding(10, 0, 0, 2);
-
+                    TextView text2 = (TextView) view.findViewById(android.R.id.text1);
                     return view;
 
                 };

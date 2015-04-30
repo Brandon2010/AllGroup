@@ -28,7 +28,7 @@
     <string name='title_activity_add_friend'>AddFriend</string>
 
     <string name='facebook_category'>From Facebook</string>
-    <string name="host">http://128.237.220.139:8080/AllGroupServerSide/servlet/</string>
+    <string name="host">http://128.237.204.196:8080/AllGroupServerSide/servlet/</string>
 
 
 </resources>

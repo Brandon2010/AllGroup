@@ -26,13 +26,14 @@
             android:layout_height="wrap_content"
             android:hint="Event Name"
             android:paddingLeft="20dp"
-            android:layout_marginTop="20dp" />
+            android:layout_marginTop="10dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="10dp">
+            android:layout_marginTop="10dp"
+           >
 
             <Spinner
                 android:id="@+id/newevent_year"
@@ -69,8 +70,7 @@
             android:layout_height="wrap_content"
             android:hint="Location"
             android:paddingLeft="20dp"
-
-            android:layout_marginBottom="5dp"/>
+            android:layout_marginTop="10dp"/>
 
         <EditText
             android:id="@+id/edit_detail"
@@ -78,25 +78,29 @@
             android:layout_height="wrap_content"
             android:hint="Details"
             android:paddingLeft="20dp"
-            android:layout_marginBottom="5dp"/>
+            android:layout_marginTop="10dp"/>
 
         <Spinner
             android:id="@+id/newevent_category"
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginTop="10dp"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Upload Image"
             android:id="@+id/upload"
-            android:layout_below="@+id/newevent_linear_1"
             android:layout_alignParentStart="true"
             android:layout_margin="10dp"
-            android:background="@color/bg_btn_trans"
-            android:textColor="#FFFFFF" />
+            android:layout_marginTop="10dp"
+            android:elegantTextHeight="false"
+            android:focusable="false"
+
+            style="@style/Base.TextAppearance.AppCompat.Button"
+            android:focusableInTouchMode="false" />
+
 
         <ImageView
             android:layout_width="wrap_content"

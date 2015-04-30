@@ -204,9 +204,8 @@ public class MainActivity extends ActionBarActivity {
             if (menu.size() == 0) {
                 newCategory = menu.add(_Category);
                 newEvent = menu.add(_EVENT);
-                privacyPolicy = menu.add(_PRIVACYPOLICY);
                 importEvent = menu.add(_IMPORT);
-
+                privacyPolicy = menu.add(_PRIVACYPOLICY);
                 settings = menu.add(R.string.settings);
             }
             return true;

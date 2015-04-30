@@ -175,9 +175,13 @@ public class PostActivity extends ActionBarActivity {
             List<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
             for (int i = 0; i < posts.size(); i++) {
                 HashMap<String, Object> item = new HashMap<String, Object>();
-                item.put("title", posts.get(i).get("username").toString());
+                String user_name = posts.get(i).get("username").toString();
+                item.put("title", user_name);
                 item.put("info", posts.get(i).get("content").toString());
-                item.put("icon", R.drawable.zhengyang);
+                if(user_name.equals("Zhengyang Zuo"))
+                    item.put("icon", R.drawable.zhengyang);
+                else
+                    item.put("icon", R.drawable.shan);
                 list.add(item);
             }
             sa = new SimpleAdapter(PostActivity.this, list, R.layout.post_item,
@@ -267,9 +271,13 @@ public class PostActivity extends ActionBarActivity {
             List<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
             for (int i = 0; i < posts.size(); i++) {
                 HashMap<String, Object> item = new HashMap<String, Object>();
-                item.put("title", posts.get(i).get("username").toString());
+                String user_name = posts.get(i).get("username").toString();
+                item.put("title", user_name);
                 item.put("info", posts.get(i).get("content").toString());
-                item.put("icon", R.drawable.zhengyang);
+                if(user_name.equals("Zhengyang Zuo"))
+                    item.put("icon", R.drawable.zhengyang);
+                else
+                    item.put("icon", R.drawable.shan);
                 list.add(item);
             }
             sa = new SimpleAdapter(PostActivity.this, list, R.layout.post_item,
