@@ -37,7 +37,7 @@
     <RelativeLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
-        android:layout_height="450dip"
+        android:layout_height="250dip"
         android:id="@+id/relative_layout"
         android:layout_alignParentTop="true"
         android:layout_above="@+id/button_layout">
@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_gravity="top"
-            android:src="@drawable/cover"
+            android:src="@drawable/loading"
             android:adjustViewBounds="true"
             />
         <ScrollView

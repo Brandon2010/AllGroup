@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,8 +18,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.cmu.allgroup.utils.JsonTools;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+
+import org.apache.http.Header;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -34,6 +41,8 @@ import java.util.Map;
 
 
 public class NewEventActivity extends ActionBarActivity {
+    private static final int PHOTO_REQUEST_GALLERY = 1;
+    private static final int PHOTO_REQUEST_CUT = 2;
     private Spinner year;
     private Spinner month;
     private Spinner date;
@@ -46,11 +55,8 @@ public class NewEventActivity extends ActionBarActivity {
     private EditText editDetail;
     private Button upload;
     private ImageView uploadImage;
-
+    private Bitmap bitmap;
     private File tempFile;
-
-    private static final int PHOTO_REQUEST_GALLERY = 1;
-    private static final int PHOTO_REQUEST_CUT = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,7 +129,10 @@ public class NewEventActivity extends ActionBarActivity {
 
                 String cateId = String.valueOf(bundle.getLong(selectedCate));
 
-                new CreateEventAsyncTask().execute(selectedName, selectedTime, selectedLocation, selectedDetail, /*selectedCate, */cateId);
+                new CreateEventAsyncTask().execute(selectedName, selectedTime, selectedLocation, selectedDetail,
+                        /*selectedCate, */cateId);
+                upload(getResources().getText(R.string.host)
+                        + "EventServlet", selectedName);
 
                 Intent intent = new Intent(NewEventActivity.this, MainActivity.class);
                 startActivity(intent);
@@ -165,6 +174,83 @@ public class NewEventActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        System.out.println("In Result");
+        System.out.println("RequestCode: " + requestCode);
+        if (requestCode == PHOTO_REQUEST_GALLERY) {
+            System.out.println("In 1");
+            if (data != null) {
+                Uri uri = data.getData();
+                ContentResolver cr = this.getContentResolver();
+                try {
+                    System.out.println(uri);
+                    bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
+                    if (bitmap == null) {
+                        System.out.println("hah");
+                        return;
+                    }
+                    uploadImage.setImageBitmap(bitmap);
+                } catch (FileNotFoundException fe) {
+                    fe.printStackTrace();
+                }
+            }
+
+        }
+
+        System.out.println("End result");
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void upload(String url, String eventName) {
+        try {
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            out.flush();
+            out.close();
+            byte[] buffer = out.toByteArray();
+
+            byte[] encode = Base64.encode(buffer, Base64.DEFAULT);
+            String photo = new String(encode);
+
+            RequestParams params = new RequestParams();
+            params.put("eventOperation", "uploadimage");
+            params.put("name", eventName);
+            params.put("photo", photo);
+
+            AsyncHttpClient client = new AsyncHttpClient();
+            client.post(url, params, new AsyncHttpResponseHandler() {
+
+
+                @Override
+                public void onSuccess(int statusCode, Header[] headers,
+                                      byte[] responseBody) {
+                    try {
+                        if (statusCode != 200) {
+                            Toast.makeText(NewEventActivity.this,
+                                    "Network Problem，Error Code:" + statusCode, Toast.LENGTH_SHORT).show();
+
+                        }
+                    } catch (Exception e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers,
+                                      byte[] responseBody, Throwable error) {
+                    Toast.makeText(NewEventActivity.this,
+                            "Network Problem, Error Code " + statusCode, Toast.LENGTH_SHORT).show();
+
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public class CreateEventAsyncTask extends
@@ -265,33 +351,6 @@ public class NewEventActivity extends ActionBarActivity {
 
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        System.out.println("In Result");
-        System.out.println("RequestCode: " + requestCode);
-        if (requestCode == PHOTO_REQUEST_GALLERY) {
-            System.out.println("In 1");
-            if (data != null) {
-                Uri uri = data.getData();
-                ContentResolver cr = this.getContentResolver();
-                try {
-                    System.out.println(uri);
-                    Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
-                    if (bitmap == null) {
-                        System.out.println("hah");
-                        return;
-                    }
-                    uploadImage.setImageBitmap(bitmap);
-                } catch (FileNotFoundException fe) {
-                    fe.printStackTrace();
-                }
-            }
-
-        }
-
-        System.out.println("End result");
-        super.onActivityResult(requestCode, resultCode, data);
-    }
 
 
 }
