@@ -3,6 +3,7 @@ package com.cmu.mobilepervasive.allgroup;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -488,5 +489,6 @@ public class SelectionFragment extends Fragment {
         }
 
     }
+
 
 }

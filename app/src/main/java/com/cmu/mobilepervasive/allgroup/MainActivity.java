@@ -5,16 +5,15 @@ package com.cmu.mobilepervasive.allgroup;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Parcel;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,12 +39,10 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.Semaphore;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Semaphore;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -518,6 +515,8 @@ public class MainActivity extends ActionBarActivity {
                                     e.printStackTrace();
                                 }
 
+                                semInner.release();
+
                                 Log.d(TAG, "Before semUserCate release");
                                 semUserCate.release();
 
@@ -718,8 +717,7 @@ public class MainActivity extends ActionBarActivity {
                 if (code == 200) {
                     String jsonString = ChangeInputStream(connection
                             .getInputStream());
-                    user = (Map<String, Object>) JsonTools
-                            .getUser("user", jsonString);
+                    user = JsonTools.getUser("user", jsonString);
 
                     Log.d(TAG, jsonString);
                 }
@@ -732,6 +730,13 @@ public class MainActivity extends ActionBarActivity {
 
             // TODO Temporarily release semaphore here, should exists better solution?
             userId = (Long) user.get("userId");
+
+
+            SharedPreferences settings = MainActivity.this.getSharedPreferences("usersetting", 0);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putString("name", (String)user.get("name"));
+            editor.putLong("user_id", (long) user.get("userId"));
+            editor.commit();
 
             Log.d(TAG, "Before semInner release");
             semInner.release();
