@@ -1,18 +1,16 @@
 package com.cmu.mobilepervasive.allgroup;
 
-import android.support.v7.app.ActionBarActivity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 
 
@@ -21,6 +19,8 @@ public class ChatActivity extends ActionBarActivity {
     private ListView listView;
     private EditText editText;
     private Button chatButton;
+    private String username;
+    private long user_id;
     //private ArrayList<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
     //private ArrayList<Map<String, Object>> listTmp = new ArrayList<Map<String, Object>>();
 
@@ -85,6 +85,10 @@ public class ChatActivity extends ActionBarActivity {
                 editText.setText("");
             }
         });
+
+        SharedPreferences settings = this.getSharedPreferences("usersetting", 0);
+        username = settings.getString("name", "Xi Wang");
+        user_id = settings.getLong("user_id", 7);
 
     }
 
