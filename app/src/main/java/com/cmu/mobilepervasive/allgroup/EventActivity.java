@@ -53,6 +53,9 @@ public class EventActivity extends ActionBarActivity {
 
         String image_url = getResources().getText(R.string.host)
                 + "EventServlet?eventOperation=image&path=" + intent.getStringExtra("image_url");
+        image_url = image_url.replaceAll(" ", "%20");
+        System.out.println(intent.getStringExtra("image_url"));
+
         new GetImageAsyncTask().execute(image_url);
 
         final Long eventId = intent.getLongExtra("eventId", 0);
